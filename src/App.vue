@@ -1,10 +1,22 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  
+  <div class="node" v-for="item in nodes" key = "item">
+    {{ item.node }}
+    
+    
+  </div>
+ 
+ 
 </template>
+<script setup>
+    import axios from 'axios';
+    import {  ref, onMounted } from 'vue';
+    let nodes = ref()
+    
+    onMounted(()=>{
+      axios.get('/nodes').then(res=>nodes.value = res.data)
+    })
+</script>
 
 <style lang="scss">
 #app {

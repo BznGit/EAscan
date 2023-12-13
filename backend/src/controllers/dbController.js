@@ -6,6 +6,8 @@ let db = mongoClient.db('EASCAN');
 
 let DbController = class {
 
+    //================================ SETTERS ==============================//
+    // Update Pplns -------------------------------------------------------- //
     async updatePplns(data){
         try{ 
             let pplns = db.collection('pplns');
@@ -15,18 +17,27 @@ let DbController = class {
         } 
     };
     
+    // Update Nodes -------------------------------------------------------- //
     async updateNodes(data){
-        let obj = {
-            array: data
-        }
         try{ 
             let nodes = db.collection('nodes');
-            await nodes.replaceOne({}, obj, {upsert: true}); 
+            await nodes.replaceOne({node: data.node}, data, {upsert: true}); 
         }catch(err){
             console.log('db updateNodes error!', err);
         } 
     };
 
+    // Update Pools -------------------------------------------------------- //
+    async updatePools(data){
+        try{ 
+            let pools = db.collection('pools');
+            await pools.replaceOne({node: data.node}, data, {upsert: true}); 
+        }catch(err){
+            console.log('db updateNodes error!', err);
+        } 
+    };
+
+    // Set Snapshot -------------------------------------------------------- //
     async setSnapshot(data){
         try{ 
             let snapshots = db.collection('snapshots');
@@ -36,15 +47,17 @@ let DbController = class {
         } 
     };
 
-    async updateMiner(data, node){
+    // Update Miner -------------------------------------------------------- //
+    async updateMiner(data){
         try{ 
-            let nodeMiner = db.collection(node);
-            await nodeMiner.replaceOne({miner: data.miner}, data, {upsert: true}); 
+            let nodeMiner = db.collection('miners');
+            await nodeMiner.replaceOne({$and: [{miner: data.miner}, {node: data.node} ]}, data, {upsert: true}); 
         }catch(err){
-            console.log('db setSnapshot error!', err);
+            console.log('db updateMiner error!', err);
         } 
     };
 
+    // Up date Hourly Chart ------------------------------------------------ //
     async updateHourlyChart(data){
         try{
             let obj = {
@@ -57,6 +70,7 @@ let DbController = class {
         } 
     };
 
+    // Update Daily Chart ------------------------------------------------ //
     async updateDailyChart(data){
         try{
             let obj = {
@@ -67,7 +81,21 @@ let DbController = class {
         }catch(err){
             console.log('db updateDailyChart error!', err);
         } 
-    }
+    };
+
+    //================================ GETTERS =============================//
+    // Get Pools ---------------------------------------------------------- //
+    async getPools(){
+        try{              
+            let nodes = db.collection('nodes');
+            let res = await nodes.find({}).toArray();
+            return res
+        }catch(err){
+            console.log('db getNodes error!');
+        } finally{
+            
+        }  
+    };
 }
 
 module.exports = DbController;

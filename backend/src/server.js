@@ -14,7 +14,7 @@ let MainApp = class {
         app.use(history({
             rewrites: [
                 {
-                  from: /^\/albums\/*$/,
+                  from: /^\/nodes\/*$/,
                   to: function (context) {
                     console.log('--',context.parsedUrl.path)
                      return context.parsedUrl.path
@@ -47,7 +47,7 @@ let MainApp = class {
         });
         //app.use(multer({storage:storageConfig}).array('file'));
         app.use('/', routes);
-        server.listen(8080, ()=>console.log("FRP server started"));
+        server.listen(8080, ()=>console.log("EAscan server started"));
         app.use(express.static('./dist')); 
     }
 }

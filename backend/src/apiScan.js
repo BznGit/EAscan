@@ -11,8 +11,8 @@ const apiScanStarter  = function(){
     api.getGeneral().then((res)=>{
         if(!res) return;
         //console.log(res)
-        if(oldTopSnapshotHash !=  res.ea.topSnapshotHash) oldTopSnapshotHash = res.ea.topSnapshotHash;
-        console.log('EAP app started!');
+        if(oldTopSnapshotHash !=  res.ea.topSnapshotHash) oldTopSnapshotHash = res.ea.topSnapshotHash; 
+        console.log('Scaning started!');
     }).then(()=>{
         
         setInterval(() => {
@@ -20,12 +20,18 @@ const apiScanStarter  = function(){
                 if(!res) return;
                     
                 // Определение нового блока ---------------------------------------
-                if (oldTopSnapshotHash != res.ea.topSnapshotHash){
+                if (oldTopSnapshotHash = res.ea.topSnapshotHash){  //  <-- Ускорение  исправлять здесь: ("!=")
                     oldTopSnapshotHash = res.ea.topSnapshotHash;
                     
+                    api.getNodes().then((res)=>{
+                        if(!res) return;
+                        res.forEach(item =>{
+                            db.updateNodes(item);
+                        })
+                    });
+
                     api.getSnapShot(oldTopSnapshotHash).then((res)=>{
                         if(!res) return;
-                        console.log('Новый блок!');
                         db.setSnapshot(res);
                     });
 
@@ -47,19 +53,21 @@ const apiScanStarter  = function(){
                         db.updateHourlyChart(res)
                     });
 
-                    // Получение и сохранение инфы по нодам ----------------------
-                    api.getNodes().then(res=>{
+                    // Получение и сохранение инфы по пулам ----- ----------------------
+                    api.getPools().then(res=>{
                         if(!res) return;
                         res.forEach(element => {
+                            db.updatePools(element)
                             let obj = element.data.miners.hr;
                             for (key in obj) {
-                                api.getMiner(key, element.ipAdress).then(res=>{
+                                api.getMiner(key, element.node).then(res=>{
                                     res.miner = key;
-                                    db.updateMiner(res, element.ipAdress)    
+                                    res.node = element.node
+                                    db.updateMiner(res)    
                                 })
                             }
                         });
-                        db.updateNodes(res)
+                        
                     });
                 } 
             })
