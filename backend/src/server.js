@@ -13,7 +13,7 @@ let MainApp = class {
     start(){
         app.use(history({
             rewrites: [
-                {
+              /*  {
                   from: /^\/nodes\/*$/,
                   to: function (context) {
                     console.log('--',context.parsedUrl.path)
@@ -29,11 +29,11 @@ let MainApp = class {
                   },
                   {
                     from: /^\/delete\/*/,
-                    to: function (context) {
+                  /*  to: function (context) {
                       console.log('--',context.parsedUrl.path)
                        return context.parsedUrl.path
                       }
-                  }
+                  }*/
               ]
         }))
         app.use(bodyParser.json());

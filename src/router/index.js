@@ -1,11 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import Nodes from '@/components/Nodes.vue'
+import Snapshot from '@/components/Snapshot.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    name: 'nodes',
+    component: Nodes
+  },
+  {
+    path: '/snapshot/:hash',
+    name: 'snapshot',
+    component: Snapshot,
   },
   {
     path: '/about',

@@ -1,16 +1,10 @@
 <template>
-  
-  <div class="node" v-for="item in nodes" key = "item">
-    {{ item.node }}
-    
-    
-  </div>
- 
- 
+  <router-view />  
 </template>
 <script setup>
     import axios from 'axios';
     import {  ref, onMounted } from 'vue';
+    
     let nodes = ref()
     
     onMounted(()=>{
@@ -27,16 +21,4 @@
   color: #2c3e50;
 }
 
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
 </style>

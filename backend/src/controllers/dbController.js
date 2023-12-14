@@ -84,14 +84,27 @@ let DbController = class {
     };
 
     //================================ GETTERS =============================//
-    // Get Pools ---------------------------------------------------------- //
-    async getPools(){
+    // Get Nodes ---------------------------------------------------------- //
+    async getNodes(){
         try{              
             let nodes = db.collection('nodes');
             let res = await nodes.find({}).toArray();
             return res
         }catch(err){
             console.log('db getNodes error!');
+        } finally{
+            
+        }  
+    };
+
+    // Get snapshot ---------------------------------------------------------- //
+    async getSnapshot(hash){
+        try{              
+            let nodes = db.collection('snapshots');
+            let res = await nodes.findOne({snapshotHash: hash});
+            return res
+        }catch(err){
+            console.log('db getSnapshot error!');
         } finally{
             
         }  
