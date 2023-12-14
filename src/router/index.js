@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Nodes from '@/components/Nodes.vue'
 import Snapshot from '@/components/Snapshot.vue'
+import Miner from '@/components/Miner.vue'
 
 const routes = [
   {
@@ -12,6 +13,10 @@ const routes = [
     path: '/snapshot/:hash',
     name: 'snapshot',
     component: Snapshot,
+  }, 
+  {
+    path: '/miner/:id', 
+    component: Miner 
   },
   {
     path: '/about',

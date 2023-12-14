@@ -2,12 +2,12 @@
   <div class="node">
   <tabel class = "info-tabel">
     <tr  v-for = "(value, name) in snapshots" key = "snapshot">
-      <td >{{ name }}:</td>
+      <td v-if="name !='_id'">{{ name }}: </td>
       <slot v-if = "name == 'Solution'" ><Solution :data="value"/></slot>
-      <slot v-else-if = "name == 'Shares'" ><Shares :data="value"/></slot>
+      <slot v-else-if = "name == 'Shares'" ><Shares :data="value" :name ="'Share'"/></slot>
       <slot v-else-if = "name == 'ValidatorReferences'" ><ValidatorReferences :data="value"/></slot>
       <slot v-else-if = "name == 'TotalWork'" ><TotalWork :data="value"/></slot>
-      <td v-else>{{ value }}</td>
+      <td v-else-if="name !='_id'">{{ value }}</td>
 
     </tr>
     
@@ -35,21 +35,11 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-td{
-  align-items: start;
-  justify-items: start;
-  align-items: left;
-}
   .node {
-  
-    padding: 10px 10px;
-  
-        
-    
+    padding: 10px 10px;   
     a {
       font-weight: bold;
       color: #2c3e50;
-  
       &.router-link-exact-active {
         color: #42b983;
       }

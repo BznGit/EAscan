@@ -51,6 +51,7 @@ let DbController = class {
     async updateMiner(data){
         try{ 
             let nodeMiner = db.collection('miners');
+            //console.log(data)
             await nodeMiner.replaceOne({$and: [{miner: data.miner}, {node: data.node} ]}, data, {upsert: true}); 
         }catch(err){
             console.log('db updateMiner error!', err);
@@ -109,6 +110,20 @@ let DbController = class {
             
         }  
     };
+
+        // Get miner ---------------------------------------------------------- //
+        async getMiner(id){
+            try{              
+                let nodes = db.collection('miners');
+                let res = await nodes.findOne({ miner: id });
+                //console.log(res)
+                return res
+            }catch(err){
+                console.log('db getMiner error!');
+            } finally{
+                
+            }  
+        };
 }
 
 module.exports = DbController;

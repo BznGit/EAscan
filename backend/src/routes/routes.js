@@ -32,6 +32,20 @@ route.get('/snapshot/:hash', function(req, res, next){
     })
 });
 
+route.get('/miner/:id', function(req, res, next){
+    console.log('/miner: ', req.params.id)
+    db.getMiner(req.params.id).then((miner)=>{         
+        if(miner){
+            res.send(JSON.stringify(miner));
+            res.end();
+        }else{
+            res.statusCode=403;
+            res.send('get Miner request error in router.js');
+            res.end();
+        }
+    })
+});
+
 
 
 

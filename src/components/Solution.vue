@@ -2,10 +2,11 @@
   <td>
   <button @click="vis=!vis">{{ (vis)?'^' : 'v' }}</button>
   <table v-show="vis" >
-    
     <tr v-for="(value, name ) in data">
       <td>{{ name }}</td>
-      <td>{{ value }}</td>
+      <router-link v-if="name =='miner'" :to="`/miner/` + value">{{ value }}</router-link>
+      <!--<router-link v-else-if="name =='node'" :to="`/node/` + value">{{ value }}</router-link>-->
+      <td v-else>{{ value }}</td>
     </tr>
   </table>
   </td>
@@ -22,7 +23,15 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-bottom {
+button {
  align-self: left; 
 }
+a {
+      font-weight: bold;
+      color: #2c3e50;
+  
+      &.router-link-exact-active {
+        color: #42b983;
+      }
+    }
 </style>

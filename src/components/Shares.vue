@@ -1,39 +1,36 @@
 <template>
-  Shares
+  <td>
+    <button @click = "vis = !vis">{{ (vis)?'^' : 'v' }}</button>
+    <table v-show = "vis">
+      <tr v-for = "(item, index) in data">
+        <td class="up">{{ name }}: {{ index + 1}}</td>
+        <td>
+          <tr v-for="(value, name) in item">
+            <td>{{ name }}</td>
+            <router-link v-if="name =='miner'" :to="`/miner/` + value">{{ value }}</router-link>
+            <td v-else>{{ value }}</td>
+          </tr>
+        </td>
+ 
+      </tr>
+    </table>
+  </td>
 </template>
 
 <script setup>
-
-
+ import {  ref } from 'vue';
+ const vis = ref(false)
+  const props = defineProps({
+  data: String,
+  name: String
+})
 
 </script>
-
+  
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-  .node {
-    display: flex;
-    flex-direction: column;
-    border-bottom: 2px solid #1e4db3;
-    padding: 10px 10px;
-  
-    .node-item {
-      display: flex;
-    }
-  
-    .info-tabel {
-      td {  
-        text-align : left;
-        
-      }
-      
-    }
-    a {
-      font-weight: bold;
-      color: #2c3e50;
-  
-      &.router-link-exact-active {
-        color: #42b983;
-      }
-    }
+  .up{
+    padding-top: 5px;
+    vertical-align: top
   }
 </style>

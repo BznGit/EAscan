@@ -61,7 +61,6 @@ let ApiController = class {
                 }
               })     
       })    
-     // console.log(nodes)
     }catch(err){
       console.log('Api getNodeShor reguest error!>>', err);
     }

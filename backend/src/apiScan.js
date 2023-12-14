@@ -59,7 +59,7 @@ const apiScanStarter  = function(){
                         res.forEach(element => {
                             db.updatePools(element)
                             let obj = element.data.miners.hr;
-                            for (key in obj) {
+                            for (let key in obj) {
                                 api.getMiner(key, element.node).then(res=>{
                                     res.miner = key;
                                     res.node = element.node
