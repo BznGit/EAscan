@@ -1,6 +1,6 @@
 <template>
+  <h1>Nodes</h1>
     <div class="node" v-for="node in nodes" key = "node">
-  
       <tabel class = "info-tabel">
         <tr >
           <td>Node:</td>
@@ -20,17 +20,15 @@
    
   </template>
   <script setup>
-      import axios from 'axios';
-      import {  ref, onMounted } from 'vue';
-      
-      let nodes = ref()
-      
-      onMounted(()=>{
-        axios.get('/nodes').then(res=>nodes.value = res.data)
-      })
+    import axios from 'axios';
+    import {  ref } from 'vue';
+    
+    let nodes = ref()
+    axios.get('/nodes').then(res=>nodes.value = res.data)
+
   </script>
   
-  <style lang="scss">
+  <style scoped lang="scss">
 
   
   .node {
@@ -46,18 +44,9 @@
     .info-tabel {
       td {  
         text-align : left;
-      
-      }
-      
-    }
-    a {
-      font-weight: bold;
-      color: #2c3e50;
-  
-      &.router-link-exact-active {
-        color: #42b983;
       }
     }
+   
   }
   </style>
   

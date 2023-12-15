@@ -124,6 +124,20 @@ let DbController = class {
                 
             }  
         };
+
+        // Get pool ---------------------------------------------------------- //
+        async getPool(ip){
+            try{              
+                let pools = db.collection('pools');
+                let res = await pools.findOne({ node: ip });
+                //console.log(res)
+                return res
+            }catch(err){
+                console.log('db getMiner error!');
+            } finally{
+                
+            }  
+        };
 }
 
 module.exports = DbController;

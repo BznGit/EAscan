@@ -8,6 +8,7 @@
           <tr v-for="(value, name) in item">
             <td>{{ name }}</td>
             <router-link v-if="name =='miner'" :to="`/miner/` + value">{{ value }}</router-link>
+            <router-link v-else-if="name =='snapshotHash'" :to="`/snapshot/` + value">{{ value }}</router-link>
             <td v-else>{{ value }}</td>
           </tr>
         </td>
@@ -18,7 +19,7 @@
 </template>
 
 <script setup>
- import {  ref } from 'vue';
+ import { ref } from 'vue';
  const vis = ref(false)
   const props = defineProps({
   data: String,

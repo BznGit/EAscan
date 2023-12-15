@@ -8,7 +8,7 @@ route.get('/nodes', function(req, res, next){
     console.log('get nodes')
     db.getNodes().then((nodes)=>{         
         if(nodes){
-            res.send(JSON.stringify(nodes));
+            res.send(nodes);
             res.end();
         }else{
             res.statusCode=403;
@@ -22,7 +22,7 @@ route.get('/snapshot/:hash', function(req, res, next){
     console.log('/snapshot: ', req.params.hash)
     db.getSnapshot(req.params.hash).then((snapshot)=>{         
         if(snapshot){
-            res.send(JSON.stringify(snapshot));
+            res.send(snapshot);
             res.end();
         }else{
             res.statusCode=403;
@@ -36,7 +36,7 @@ route.get('/miner/:id', function(req, res, next){
     console.log('/miner: ', req.params.id)
     db.getMiner(req.params.id).then((miner)=>{         
         if(miner){
-            res.send(JSON.stringify(miner));
+            res.send(miner);
             res.end();
         }else{
             res.statusCode=403;
@@ -46,6 +46,19 @@ route.get('/miner/:id', function(req, res, next){
     })
 });
 
+route.get('/pool/:ip', function(req, res, next){
+    console.log('/pool: ', req.params.ip)
+    db.getPool(req.params.ip).then((pool)=>{         
+        if(pool){
+            res.send(pool);
+            res.end();
+        }else{
+            res.statusCode=403;
+            res.send('get Pool request error in router.js');
+            res.end();
+        }
+    })
+});
 
 
 
