@@ -13,27 +13,32 @@ let MainApp = class {
     start(){
         app.use(history({
             rewrites: [
-              /*  {
+                {
                   from: /^\/nodes\/*$/,
                   to: function (context) {
-                    console.log('--',context.parsedUrl.path)
+              
                      return context.parsedUrl.path
                     }
                 },
                 {
-                    from: /^\/admin\/*$/,
+                    from: /^\/snapshot\/*$/,
                     to: function (context) {
-                      console.log('--',context.parsedUrl.path)
+                 
                        return context.parsedUrl.path
                       }
                   },
                   {
-                    from: /^\/delete\/*/,
-                  /*  to: function (context) {
-                      console.log('--',context.parsedUrl.path)
+                    from: /^\/miner\/*/,
+                    to: function (context) {
                        return context.parsedUrl.path
                       }
-                  }*/
+                  },
+                  {
+                    from: /^\/pool\/*/,
+                    to: function (context) {
+                       return context.parsedUrl.path
+                      }
+                  }
               ]
         }))
         app.use(bodyParser.json());
