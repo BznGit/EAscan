@@ -1,4 +1,5 @@
 
+const settings = require('./nodesSettings')
 const express = require('express');
 const app = express();
 const server = require('http').Server(app);
@@ -52,7 +53,7 @@ let MainApp = class {
         });
         //app.use(multer({storage:storageConfig}).array('file'));
         app.use('/', routes);
-        server.listen(8080, ()=>console.log("EAscan server started"));
+        server.listen(settings.port, ()=>console.log("EAscan server started on port: ", settings.port));
         app.use(express.static('./dist')); 
     }
 }
