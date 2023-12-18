@@ -20,7 +20,7 @@ const apiScanStarter  = function(){
                 if(!res) return;
                     
                 // Определение нового блока ---------------------------------------
-                if (oldTopSnapshotHash = res.ea.topSnapshotHash){  //  <-- Ускорение  исправлять здесь: ("!=")
+                if (oldTopSnapshotHash != res.ea.topSnapshotHash){  //  <-- Ускорение  исправлять здесь: ("!=")
                     oldTopSnapshotHash = res.ea.topSnapshotHash;
                     
                     api.getNodes().then((res)=>{
