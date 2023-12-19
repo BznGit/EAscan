@@ -1,6 +1,5 @@
 <template>
   <h1>Pool</h1>
-  
   <table>
       <tr>
         <td>URL: </td>

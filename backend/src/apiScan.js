@@ -50,7 +50,7 @@ const apiScanStarter  = function(){
                     // Получение и сохранение инфы по HourlyChart ----------------------
                     api.getDailyChart().then(res=>{
                         if(!res) return;
-                        db.updateHourlyChart(res)
+                        db.updateDailyChart(res)
                     });
 
                     // Получение и сохранение инфы по пулам ----- ----------------------

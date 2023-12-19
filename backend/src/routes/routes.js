@@ -60,6 +60,18 @@ route.get('/pool/:ip', function(req, res, next){
     })
 });
 
-
+route.get('/chart/:period', function(req, res, next){
+    console.log('/chart: ', req.params.period)
+    db.getChart(req.params.period).then((chart)=>{         
+        if(chart){
+            res.send(chart);
+            res.end();
+        }else{
+            res.statusCode=403;
+            res.send('get Pool request error in router.js');
+            res.end();
+        }
+    })
+});
 
 module.exports = route;

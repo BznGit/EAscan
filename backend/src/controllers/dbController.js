@@ -138,6 +138,27 @@ let DbController = class {
                 
             }  
         };
+
+        // Get pool ---------------------------------------------------------- //
+        async getChart(period){
+        try{      
+            let collection = null;       
+            switch(period){
+                case 'hour': collection = 'hourlyChart';
+                    break;
+                case 'day': collection = 'dailyChart';
+                    break;
+            }
+            let coll = db.collection(collection);
+            let res = await coll.findOne({});
+            //console.log(res)
+            return res.array.entries
+        }catch(err){
+            console.log('db getChart error!');
+        } finally{
+            
+        }  
+    };
 }
 
 module.exports = DbController;

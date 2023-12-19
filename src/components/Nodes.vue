@@ -16,15 +16,18 @@
           <td v-else>{{ value }}</td>
         </tr>
       </tabel>
+      <Chart/>
     </div>
    
   </template>
   <script setup>
     import axios from 'axios';
-    import {  ref } from 'vue';
+    import { ref } from 'vue';
+    import Chart from '@/components/Chart.vue'
     
-    let nodes = ref()
+    let nodes = ref({})
     axios.get('/nodes').then(res=>nodes.value = res.data)
+
 
   </script>
   
