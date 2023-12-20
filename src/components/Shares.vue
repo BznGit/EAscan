@@ -6,15 +6,20 @@
         <td class="up">{{ name }}: {{ index + 1}}</td>
         <td>
           <tr v-for="(value, name) in item">
-            <td>{{ name }}</td>
+            <td>{{ name }}: </td>
             <router-link v-if="name =='miner'" :to="`/miner/` + value">{{ value }}</router-link>
             <router-link v-else-if="name =='snapshotHash'" :to="`/snapshot/` + value">{{ value }}</router-link>
             <td v-else-if="name =='transactions'">
-              {{ name }}
               <tr v-for = "item in value">  
                 <router-link :to="`/miner/` + item"> {{ item }}</router-link>
               </tr>
-            </td> 
+            </td>
+            <td v-else-if="name =='manifest'">
+              <tr v-for = "(value1,  name1) in value">  
+                <td>{{ name1 }}: </td>
+                <td>{{ value1 }}</td>
+              </tr>
+            </td>  
             <td v-else>{{ value }}</td>
           </tr>
         </td>
@@ -36,8 +41,13 @@
   
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-  .up{
-    padding-top: 5px;
+ td{ 
+    vertical-align: top
+  }
+  table{
+
+    border-collapse: collapse;
+    text-align: left;
     vertical-align: top
   }
 </style>
