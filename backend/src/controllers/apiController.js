@@ -9,7 +9,7 @@ let ApiController = class {
   async getPplns(){
     let obj = null;
     try{
-      await axios.get('http://' + blockchainEA + ':8888/pplns', {agent:false}).then(res => {
+      await axios.get('http://' + blockchainEA + ':8888/pplns/', {agent:false}).then(res => {
         obj = res.data;  
       })
     }catch(err){
@@ -82,7 +82,7 @@ let ApiController = class {
     try{
  
       await Promise.allSettled(arrNodes.map(item =>
-          axios.get('http://' + item.node + ':7000/general'))).then(res => {
+          axios.get('http://' + item.node + ':7000/general/'))).then(res => {
             let i = 0;
               res.forEach(item=>{
                 if (item.status=='fulfilled'){
@@ -125,7 +125,7 @@ let ApiController = class {
   async getHourlyChart(){
     let obj = null;
     try{
-      await axios.get('http://' + blockchainEA + ':8888/hourlyChart/1111111', {agent:false}).then(res => {
+      await axios.get('http://' + blockchainEA + ':8888/hourlyChart/1111111/', {agent:false}).then(res => {
         obj = res.data;  
       })
     }catch(err){
@@ -138,7 +138,7 @@ let ApiController = class {
     async getDailyChart(){
       let obj = null;
       try{
-        await axios.get('http://' + blockchainEA + ':8888/dailyChart/1111111', {agent:false}).then(res => {
+        await axios.get('http://' + blockchainEA + ':8888/dailyChart/1111111/', {agent:false}).then(res => {
           obj = res.data;  
         })
       }catch(err){
