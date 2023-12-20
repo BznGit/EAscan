@@ -22,7 +22,7 @@ let ApiController = class {
   async getGeneral(){
     let obj = null;
     try{
-      await axios.get('http://' + blockchainEA + ':8888' + '/general', {agent:false}).then(res => {
+      await axios.get('http://' + blockchainEA + ':8888' + '/general/', {agent:false}).then(res => {
         obj = res.data;  
       })
     }catch(err){
@@ -50,7 +50,7 @@ let ApiController = class {
     try{
  
       await Promise.allSettled(arrNodes.map(item =>
-          axios.get('http://' + item.node + ':8888/general'))).then(res => {
+          axios.get('http://' + item.node + ':8888/general/'))).then(res => {
             let i = 0;
               res.forEach(item=>{
                 if (item.status=='fulfilled'){
