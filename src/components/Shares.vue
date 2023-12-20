@@ -9,6 +9,11 @@
             <td>{{ name }}</td>
             <router-link v-if="name =='miner'" :to="`/miner/` + value">{{ value }}</router-link>
             <router-link v-else-if="name =='snapshotHash'" :to="`/snapshot/` + value">{{ value }}</router-link>
+            <td v-if="name =='transactions'">
+              <tr v-for = "item in value">  
+                <router-link :to="`/miner/` + item"> {{ item }}</router-link>
+              </tr>
+            </td> 
             <td v-else>{{ value }}</td>
           </tr>
         </td>
