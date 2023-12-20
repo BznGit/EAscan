@@ -26,7 +26,7 @@ let ApiController = class {
         obj = res.data;  
       })
     }catch(err){
-      console.log('Api general reguest error!>>', err);
+      console.log('Api getGeneral reguest error!>>', err);
     }
   return obj; 
   };
@@ -39,7 +39,7 @@ let ApiController = class {
         obj = res.data;  
       })
     }catch(err){
-      console.log('Api snapShot reguest error!', err);
+      console.log('Api getSnapShot reguest error!>>', err);
     }
   return obj;  
   };
@@ -62,7 +62,7 @@ let ApiController = class {
               })     
       })    
     }catch(err){
-      console.log('Api getNodeShor reguest error!>>', err);
+      console.log('Api getNodes reguest error!>>', err);
     }
     let arr =[];
     arrNodes.forEach((item)=>{
@@ -95,7 +95,7 @@ let ApiController = class {
       })    
      // console.log(nodes)
     }catch(err){
-      console.log('Api getNodeShor reguest error!>>', err);
+      console.log('Api getPools reguest error!>>', err);
     }
     let arr =[];
     arrNodes.forEach((item)=>{
@@ -117,7 +117,7 @@ let ApiController = class {
         obj = res.data;  
       })
     }catch(err){
-      console.log('Api general reguest error!>>', err);
+      console.log('Api getMiner reguest error!>>', err);
     }
   return obj; 
   };
@@ -129,7 +129,7 @@ let ApiController = class {
         obj = res.data;  
       })
     }catch(err){
-      console.log('Api pplns reguest error!>>',err);
+      console.log('Api getHourlyChart reguest error!>>',err);
     }
     return obj;  
   };
@@ -142,7 +142,7 @@ let ApiController = class {
           obj = res.data;  
         })
       }catch(err){
-        console.log('Api pplns reguest error!>>',err);
+        console.log('Api getDailyChart reguest error!>>',err);
       }
       return obj;  
     };
