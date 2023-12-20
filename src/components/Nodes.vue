@@ -16,7 +16,7 @@
           <td v-else>{{ value }}</td>
         </tr>
       </tabel>
-      <Chart/>
+      <!--<Chart/>-->
     </div>
    
   </template>
