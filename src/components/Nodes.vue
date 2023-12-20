@@ -16,7 +16,10 @@
           <td v-else>{{ value }}</td>
         </tr>
       </tabel>
-      <!--<Chart/>-->
+      <div class="chart">
+        <Chart/>
+      </div>
+      
     </div>
    
   </template>
@@ -33,10 +36,16 @@
   
   <style scoped lang="scss">
 
-  
+  .chart{
+    display: flex;
+    justify-self: center;
+    align-self: center;
+    width: 50%;
+   
+  }
   .node {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     border-bottom: 2px solid #1e4db3;
     padding: 10px 10px;
   

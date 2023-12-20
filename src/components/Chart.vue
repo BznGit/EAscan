@@ -1,7 +1,5 @@
 <template>
- <h1> Chart</h1>
- {{ chart }}
- <Bar :data="options.data" :options="options.options" />
+  <Line class="line" ref="lineRef" :data="data" :options="options" />
 </template>
 
 <script setup>
@@ -9,33 +7,108 @@ import axios from 'axios';
 import { ref } from 'vue';
 import {
   Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  TimeScale,
   Title,
   Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale
+  Legend
 } from 'chart.js'
-import { Bar } from 'vue-chartjs'
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
-
-let options = ref( {
-
-      data: {
-        labels: ['January', 'February', 'March'],
-        datasets: [{ data: [40, 20, 12] }]
-      },
-      options: {
-        responsive: true
-      }
+import { Line } from 'vue-chartjs'
+  ChartJS.register(CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    TimeScale,
+    Title,
+    Tooltip,
+    Legend,
+  )
+  const lineRef = ref({})
+let data = ref({
+  labels: [],
+  datasets: [
+    {
+      data: [12],
+            label:"Hashrate",
+            borderColor: '#0068dd',
+            backgroundColor: '#0068dd',
+            cubicInterpolationMode: 'monotone',
+            pointRadius:0,
+            yAxisID: 'left-y-axis',
+            hidden: false
     }
+  ]
+})  
+let options = ref({
+
+ interaction: {
+        mode: 'index',
+        intersect: false,
+      },
+      plugins: {  
+        verticalLiner: {
+          line:{
+            dash: [1, 1],
+            color: 'red',
+            width: 1
+          }
+        },
+        legend: {
+          display:false,
+          labels: {
+            display:true,
+            usePointStyle: true,
+          },
+        },
+        tooltip: {
+          usePointStyle: true,
+          callbacks: {
+            labelPointStyle: function(context) {
+              return {
+                pointStyle: 'circule',
+                rotation: 0
+            };
+            },
+            
+          },
+        },
+        
+      },
+      scales: {
+        x: {
+          
+          time: {
+            unit: 'hour',
+            displayFormats: {
+              minute:'HH:mm',
+              hour: 'HH:mm',
+              day: 'dd.MM',
+              week:'dd.MM.yy',
+            }
+          },
+        },
+        'left-y-axis': {
+
+          position: 'left',
+          title: {text:"-", display: true},
+          min: 0
+        },
+      }
+    },
+    
 )
-let chart = ref({})
-axios.get('/chart/hour').then(res=>chart.value = res.data)
+
+axios.get('/chart/hour').then(res=>{data.value.datasets[0].data = res.data.map(item=>{return {x: item.sliceTime, y: parseInt(item.hashRate)}});
+})
+
+
 
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-  
+
 </style>
