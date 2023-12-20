@@ -8,8 +8,10 @@
         <router-link v-if="name =='parentSnapshotHash'" :to="`/snapshot/` + value">{{ value }}</router-link>
         <slot v-else-if = "name == 'Solution'" ><Solution :data="value"/></slot>
         <slot v-else-if = "name == 'Shares'" ><Shares :data="value" :name ="'Share'"/></slot>
-        <slot v-else-if = "name == 'ValidatorReferences'" ><Shares :data="value" :name ="'validator reference'"/></slot>
+        <slot v-else-if = "name == 'ValidatorsEntries'" ><Shares :data="value" :name ="'Validators entries'"/></slot>
+        <slot v-else-if = "name == 'ValidatorReferences'" ><Shares :data="value" :name ="'Validator reference'"/></slot>
         <slot v-else-if = "name == 'TotalWork'" ><Shares :data="value" :name ="'work'"/></slot>
+        
         <td v-else-if="name !='_id'">{{ value }}</td>
       </tr>
     </tabel>
