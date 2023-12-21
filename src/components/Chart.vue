@@ -1,37 +1,27 @@
 <template>
-  <Line class="line" ref="lineRef" :data="data" :options="options" />
+
+  <canvas  :id="idChart" width="400" height="200"></canvas>
 </template>
 
 <script setup>
 import axios from 'axios';
-import { ref } from 'vue';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  TimeScale,
-  Title,
-  Tooltip,
-  Legend
-} from 'chart.js'
-import { Line } from 'vue-chartjs'
-  ChartJS.register(CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    TimeScale,
-    Title,
-    Tooltip,
-    Legend,
-  )
-  const lineRef = ref({})
-let data = ref({
-  labels: [],
-  datasets: [
-    {
-      data: [12],
+import { ref, onMounted } from 'vue';
+import Chart from 'chart.js/auto';
+import 'chartjs-adapter-date-fns';
+import { formatHashrate } from "../utils/utils.js";
+const props = defineProps({
+  idChart: String
+})
+console.log(props.idChart)
+onMounted(()=>{
+ 
+ const ctx = document.getElementById(props.idChart);
+  const myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      datasets: [
+        {
+            data: '-',
             label:"Hashrate",
             borderColor: '#0068dd',
             backgroundColor: '#0068dd',
@@ -39,19 +29,19 @@ let data = ref({
             pointRadius:0,
             yAxisID: 'left-y-axis',
             hidden: false
-    }
-  ]
-})  
-let options = ref({
-
- interaction: {
+        },
+      ]
+    },
+    options: {
+      maintainAspectRatio: false,
+      interaction: {
         mode: 'index',
         intersect: false,
       },
       plugins: {  
         verticalLiner: {
           line:{
-            dash: [1, 1],
+            dash: [1, 2],
             color: 'red',
             width: 1
           }
@@ -74,14 +64,19 @@ let options = ref({
             },
             
           },
+          label: function(tooltipItems) {
+            console.log(tooltipItems)
+                  var text =  'Hashrate: ' +   + ' '  + formatHashrate(parseInt(tooltipItems.parsed.y))[0]  + formatHashrate(parseInt(tooltipItems.parsed.y))[1];
+                    return  text;
+            } ,
         },
         
       },
       scales: {
         x: {
-          
+          type: 'time',       
           time: {
-            unit: 'hour',
+            unit: 'minute',
             displayFormats: {
               minute:'HH:mm',
               hour: 'HH:mm',
@@ -91,20 +86,47 @@ let options = ref({
           },
         },
         'left-y-axis': {
-
+          type: 'linear',
           position: 'left',
-          title: {text:"-", display: true},
+          title: {text:"-",display: true},
           min: 0
         },
       }
     },
-    
-)
+    plugins: [{
+      id: 'verticalLiner',
+      afterInit: (chart, args, opts) => {
+        chart.verticalLiner = {}
+      },
+      afterEvent: (chart, args, options) => {
+          const {inChartArea} = args
+          chart.verticalLiner = {draw: inChartArea}
+      },
+      beforeTooltipDraw: (chart, args, options) => {
+          const {draw} = chart.verticalLiner
+          if (!draw) return
+  
+          const {ctx} = chart
+          const {top, bottom} = chart.chartArea
+          const {tooltip} = args
+          const x = tooltip?.caretX
+          if (!x) return
+          ctx.save()
+          ctx.beginPath()
+          ctx.moveTo(x, top)
+          ctx.lineTo(x, bottom)
+          ctx.stroke()
+          ctx.restore()
+      }
+  }]
 
-axios.get('/chart/hour').then(res=>{data.value.datasets[0].data = res.data.map(item=>{return {x: item.sliceTime, y: parseInt(item.hashRate)}});
-})
-
-
+  });
+  myChart;
+  axios.get('/chart/hour').then(res=>{myChart.data.datasets[0].data = res.data.map(item=>{return {x: item.sliceTime, y: formatHashrate(parseInt(item.hashRate))[0]}})
+  myChart.update()
+  });
+  
+})  
 
 </script>
 

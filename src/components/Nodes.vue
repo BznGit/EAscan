@@ -1,6 +1,6 @@
 <template>
   <h1>Nodes</h1>
-    <div class="node" v-for="node in nodes" key = "node">
+    <div class="node" v-for="(node, index) in nodes" key = "node">
       <tabel class = "info-tabel">
         <tr >
           <td>Node:</td>
@@ -17,7 +17,7 @@
         </tr>
       </tabel>
       <div class="chart">
-        <Chart/>
+        <Chart :idChart="index"/>
       </div>
       
     </div>
