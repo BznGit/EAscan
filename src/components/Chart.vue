@@ -122,7 +122,7 @@ onMounted(()=>{
 
   });
   myChart;
-  axios.get('/chart/hour').then(res=>{myChart.data.datasets[0].data = res.data.map(item=>{return {x: item.sliceTime, y: formatHashrate(parseInt(item.hashRate))[0]}})
+  axios.get('/chart/hour').then(res=>{myChart.data.datasets[0].data = res.data.map(item=>{return {x: item.sliceTime, y: formatHashrate(parseInt(item.sliceWork))[0]}})
   myChart.update()
   });
   
