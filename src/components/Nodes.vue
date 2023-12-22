@@ -1,5 +1,15 @@
 <template>
   <h1>Nodes</h1>
+
+  <div class="node">
+<tabel>
+  <tr v-for = "(value, name) in inf" key = "name" >    
+          <td >{{ name }}:</td>
+          <router-link v-if="name =='topSnapshotHash'" :to="`/snapshot/` + value">{{ value }}</router-link>
+          <td v-else>{{ value }}</td>
+        </tr>
+      </tabel>
+  </div>
     <div class="node" v-for="(node, index) in nodes" key = "node">
       <tabel class = "info-tabel">
         <tr >
@@ -10,11 +20,7 @@
           <td>Pool url:</td>
           <td>{{ node.url }}</td>
         </tr>
-        <tr v-for = "(value, name) in node.data.ea" key = "name" >    
-          <td >{{ name }}:</td>
-          <router-link v-if="name =='topSnapshotHash'" :to="`/snapshot/` + value">{{ value }}</router-link>
-          <td v-else>{{ value }}</td>
-        </tr>
+
       </tabel>
 
     </div>
@@ -29,8 +35,11 @@
     import { formatHashrate } from "../utils/utils.js";
     
     let nodes = ref({});
+    let inf = ref({})
     let chart = ref({});
-    axios.get('/nodes').then(res=>nodes.value = res.data)
+
+    axios.get('/nodes').then(res=>{nodes.value = res.data; inf =res.data[0].data.ea })
+    
     axios.get('/chart/day').then(res=>chart = res.data.entries.map(item=>{return {x: item.sliceTime, y: formatHashrate(parseInt(item.hashRate))[0]}}))
 
   </script>
