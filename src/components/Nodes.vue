@@ -16,21 +16,22 @@
           <td v-else>{{ value }}</td>
         </tr>
       </tabel>
-      <div class="chart">
-        <Chart :idChart="index"/>
-      </div>
-      
+
     </div>
-   
+    <div class="chart">
+          <Chart :idChart = "45" :data = "chart"/>
+      </div> 
   </template>
   <script setup>
     import axios from 'axios';
-    import { ref } from 'vue';
-    import Chart from '@/components/Chart.vue'
+    import { ref, onMounted } from 'vue';
+    import Chart from '@/components/Chart.vue';
+    import { formatHashrate } from "../utils/utils.js";
     
-    let nodes = ref({})
+    let nodes = ref({});
+    let chart = ref({});
     axios.get('/nodes').then(res=>nodes.value = res.data)
-
+    axios.get('/chart/day').then(res=>chart = res.data.entries.map(item=>{return {x: item.sliceTime, y: formatHashrate(parseInt(item.hashRate))[0]}}))
 
   </script>
   

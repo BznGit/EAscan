@@ -7,11 +7,11 @@ const db = new DbController();
 
 let oldTopSnapshotHash = 'null';
 
-const apiScanStarter  = function(){
+const  apiScanStarter  = function(){
     api.getGeneral().then((res)=>{
         if(!res) return;
         //console.log(res)
-        if(oldTopSnapshotHash !=  res.ea.topSnapshotHash) oldTopSnapshotHash = res.ea.topSnapshotHash; 
+        if(oldTopSnapshotHash ==  res.ea.topSnapshotHash) oldTopSnapshotHash = res.ea.topSnapshotHash; 
         console.log('Scaning started!');
     }).then(()=>{
         
@@ -19,10 +19,11 @@ const apiScanStarter  = function(){
             api.getGeneral().then((res)=>{
                 if(!res) return;
                     
-                // Определение нового блока ---------------------------------------
+                // Определение нового блока --------------------------------------------
                 if (oldTopSnapshotHash != res.ea.topSnapshotHash){  //  <-- Ускорение  исправлять здесь: ("!=")
                     oldTopSnapshotHash = res.ea.topSnapshotHash;
                     
+                    // Получение и сохранение инфы по нодам ----------------------------
                     api.getNodes().then((res)=>{
                         if(!res) return;
                         res.forEach(item =>{
@@ -30,34 +31,39 @@ const apiScanStarter  = function(){
                         })
                     });
 
+                    // Получение и сохранение инфы по snapchot -------------------------
                     api.getSnapShot(oldTopSnapshotHash).then((res)=>{
                         if(!res) return;
                         db.setSnapshot(res);
                     });
 
-                    // Получение и сохранение инфы по PPLNS ----------------------
+                    // Получение и сохранение инфы по PPLNS ----------------------------
                     api.getPplns().then(res=>{
                         if(!res) return;
                         db.updatePplns(res)
                     });
 
                     // Получение и сохранение инфы по HourlyChart ----------------------
-                    api.getHourlyChart().then(res=>{
+                    api.getHourlyChartEA().then(res=>{
                         if(!res) return;
-                        db.updateHourlyChart(res)
+                        db.updateHourlyChartEA(res)
                     });
 
                     // Получение и сохранение инфы по HourlyChart ----------------------
-                    api.getDailyChart().then(res=>{
+                    api.getDailyChartEA().then(res=>{
                         if(!res) return;
-                        db.updateDailyChart(res)
+                        db.updateDailyChartEA(res)
                     });
 
                     // Получение и сохранение инфы по пулам ----- ----------------------
                     api.getPools().then(res=>{
                         if(!res) return;
-                        res.forEach(element => {
-                            db.updatePools(element)
+                        res.forEach(async function(element){
+                            let hourlyChart = await api.getHourlyChart();
+                            let dailyChart = await api.getDailyChart();
+                            element.hourlyChart =  hourlyChart;
+                            element.dailyChart =  dailyChart;
+                            db.updatePools(element);
                             let obj = element.data.miners.hr;
                             for (let key in obj) {
                                 api.getMiner(key, element.node).then(res=>{

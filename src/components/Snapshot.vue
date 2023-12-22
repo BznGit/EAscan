@@ -33,8 +33,7 @@
         console.log('-->',url, route.params.hash)
         axios.get('/snapshot/' + route.params.hash).then(res=>snapshots.value = res.data)
         
-      }
-      
+      } 
     )
 
 

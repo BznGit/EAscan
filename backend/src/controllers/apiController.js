@@ -80,20 +80,17 @@ let ApiController = class {
   async getPools(){
     let nodes = [];
     try{
- 
       await Promise.allSettled(arrNodes.map(item =>
-          axios.get('http://' + item.node + ':7000/general/'))).then(res => {
-            let i = 0;
-              res.forEach(item=>{
-                if (item.status=='fulfilled'){
-                    let nodeInf = item.value.data;
-                    let currUrl =  item.value.request.res.responseUrl;
-                    nodes.push({node: currUrl.slice(7, -13),  data: nodeInf })
-                    i++ 
-                }
-              })     
+        axios.get('http://' + item.node + ':7000/general/'))).then(res => {
+          res.forEach(item=>{
+            if (item.status=='fulfilled'){
+              let nodeInf = item.value.data;
+              let currUrl =  item.value.request.res.responseUrl;
+              nodes.push({node: currUrl.slice(7, -14),  data: nodeInf })
+          }
+          })     
       })    
-     // console.log(nodes)
+     
     }catch(err){
       console.log('Api getPools reguest error!>>', err);
     }
@@ -121,6 +118,33 @@ let ApiController = class {
     }
   return obj; 
   };
+
+// Запрос HourlyChart EA--------------------------------------------------------------------------------/
+async getHourlyChartEA(){
+  let obj = null;
+  try{
+    await axios.get('http://' + blockchainEA + ':8888/hourlyChart/1111111', {agent:false}).then(res => {
+      obj = res.data;  
+    })
+  }catch(err){
+    console.log('Api getHourlyChart reguest error!>>',err);
+  }
+  return obj;  
+};
+
+  // Запрос dailyChart EA--------------------------------------------------------------------------------/
+  async getDailyChartEA(){
+    let obj = null;
+    try{
+      await axios.get('http://' + blockchainEA + ':8888/dailyChart/111111', {agent:false}).then(res => {
+        obj = res.data;  
+      })
+    }catch(err){
+      console.log('Api getDailyChart reguest error!>>',err);
+    }
+    return obj;  
+  };
+
   // Запрос HourlyChart --------------------------------------------------------------------------------/
   async getHourlyChart(){
     let obj = null;

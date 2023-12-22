@@ -5,14 +5,17 @@
 
 <script setup>
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 import { formatHashrate } from "../utils/utils.js";
 const props = defineProps({
-  idChart: String
+  idChart: String,
+  from: String, 
+  data: String,
+
 })
-console.log(props.idChart)
+
 onMounted(()=>{
  
  const ctx = document.getElementById(props.idChart);
@@ -21,7 +24,7 @@ onMounted(()=>{
     data: {
       datasets: [
         {
-            data: '-',
+            data: '',
             label:"Hashrate",
             borderColor: '#0068dd',
             backgroundColor: '#0068dd',
@@ -76,7 +79,7 @@ onMounted(()=>{
         x: {
           type: 'time',       
           time: {
-            unit: 'minute',
+            unit: 'hour',
             displayFormats: {
               minute:'HH:mm',
               hour: 'HH:mm',
@@ -121,12 +124,18 @@ onMounted(()=>{
   }]
 
   });
-  myChart;
-  axios.get('/chart/hour').then(res=>{myChart.data.datasets[0].data = res.data.map(item=>{return {x: item.sliceTime, y: formatHashrate(parseInt(item.sliceWork))[0]}})
+  myChart.data.datasets[0].data = props.data;
   myChart.update()
-  });
-  
-})  
+watch(props, (url, newUrl)=>{
+
+  myChart.data.datasets[0].data = props.data;
+  myChart.update()
+        
+      } 
+    )
+
+});
+
 
 </script>
 

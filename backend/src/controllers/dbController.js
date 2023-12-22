@@ -59,12 +59,12 @@ let DbController = class {
     };
 
     // Up date Hourly Chart ------------------------------------------------ //
-    async updateHourlyChart(data){
+    async updateHourlyChartEA(data){
         try{
             let obj = {
                 array: data
             } 
-            let hourlyChart = db.collection('hourlyChart');
+            let hourlyChart = db.collection('hourlyChartEA');
             await hourlyChart.replaceOne({}, obj, {upsert: true}); 
         }catch(err){
             console.log('db updateHourlyChart error!', err);
@@ -72,12 +72,12 @@ let DbController = class {
     };
 
     // Update Daily Chart ------------------------------------------------ //
-    async updateDailyChart(data){
+    async updateDailyChartEA(data){
         try{
             let obj = {
                 array: data
             } 
-            let dailyChart = db.collection('dailyChart');
+            let dailyChart = db.collection('dailyChartEA');
             await dailyChart.replaceOne({}, obj, {upsert: true}); 
         }catch(err){
             console.log('db updateDailyChart error!', err);
@@ -126,10 +126,10 @@ let DbController = class {
         };
 
         // Get pool ---------------------------------------------------------- //
-        async getPool(ip){
+        async getPool(pool){
             try{              
                 let pools = db.collection('pools');
-                let res = await pools.findOne({ node: ip });
+                let res = await pools.findOne({ node: pool });
                 //console.log(res)
                 return res
             }catch(err){
@@ -144,15 +144,15 @@ let DbController = class {
         try{      
             let collection = null;       
             switch(period){
-                case 'hour': collection = 'hourlyChart';
+                case 'hour': collection = 'hourlyChartEA';
                     break;
-                case 'day': collection = 'dailyChart';
+                case 'day': collection = 'dailyChartEA';
                     break;
             }
             let coll = db.collection(collection);
             let res = await coll.findOne({});
             //console.log(res)
-            return res.array.entries
+            return res.array
         }catch(err){
             console.log('db getChart error!');
         } finally{
