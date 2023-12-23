@@ -126,13 +126,13 @@ onMounted(()=>{
   });
   myChart.data.datasets[0].data = props.data;
   myChart.update()
-watch(props, (url, newUrl)=>{
+  watch(props, (url, newUrl)=>{
 
-  myChart.data.datasets[0].data = props.data;
-  myChart.update()
-        
-      } 
-    )
+    myChart.data.datasets[0].data = props.data;
+    myChart.update()
+          
+        } 
+  )
 
 });
 

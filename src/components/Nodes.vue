@@ -1,46 +1,51 @@
 <template>
   <h1>Nodes</h1>
 
-  <div class="node">
-<tabel>
+  <div class="node noborder">
+<tabel class = "info-tabel">
   <tr v-for = "(value, name) in inf" key = "name" >    
           <td >{{ name }}:</td>
           <router-link v-if="name =='topSnapshotHash'" :to="`/snapshot/` + value">{{ value }}</router-link>
           <td v-else>{{ value }}</td>
         </tr>
-      </tabel>
+      </tabel> 
+       <div class="chart">
+          <Chart :idChart = "45" :data = "chart"/>
+      </div>  
   </div>
+ <h2>Pools</h2>
     <div class="node" v-for="(node, index) in nodes" key = "node">
       <tabel class = "info-tabel">
         <tr >
-          <td>Node:</td>
-          <td>{{ node.node }}</td>
+          <td>Node: </td>
+          <td><router-link  :to="`/pool/` + node.node">{{ node.node }}</router-link></td>
         </tr>
         <tr>
-          <td>Pool url:</td>
-          <td>{{ node.url }}</td>
+          <td>Pool url: </td>
+          <td><a :href ="`http://` + node.url" > {{ node.url }}</a></td>
         </tr>
 
       </tabel>
 
     </div>
-    <div class="chart">
-          <Chart :idChart = "45" :data = "chart"/>
-      </div> 
+ 
   </template>
   <script setup>
     import axios from 'axios';
-    import { ref, onMounted } from 'vue';
+    import { ref, watch } from 'vue';
     import Chart from '@/components/Chart.vue';
     import { formatHashrate } from "../utils/utils.js";
+    import { useRoute } from 'vue-router';
     
     let nodes = ref({});
     let inf = ref({})
     let chart = ref({});
+    const route = useRoute()
 
     axios.get('/nodes').then(res=>{nodes.value = res.data; inf =res.data[0].data.ea })
     
     axios.get('/chart/day').then(res=>chart = res.data.entries.map(item=>{return {x: item.sliceTime, y: formatHashrate(parseInt(item.hashRate))[0]}}))
+
 
   </script>
   
@@ -53,6 +58,7 @@
     width: 50%;
    
   }
+
   .node {
     display: flex;
     flex-direction: row;
@@ -69,6 +75,9 @@
       }
     }
    
+  }
+  .noborder{
+    border: 0px solid #1e4db3;
   }
   </style>
   
