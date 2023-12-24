@@ -1,142 +1,55 @@
 <template>
-
+ <Line :data="chartData" :options="chartOptions"  :key = "ass"/>
   <canvas  :id="idChart" width="400" height="200"></canvas>
 </template>
 
 <script setup>
-import axios from 'axios';
-import { ref, onMounted, watch } from 'vue';
-import Chart from 'chart.js/auto';
-import 'chartjs-adapter-date-fns';
-import { formatHashrate } from "../utils/utils.js";
-const props = defineProps({
-  idChart: String,
-  from: String, 
-  data: String,
+  import { Line } from 'vue-chartjs'
+  import { Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend } from 'chart.js'
+  import { computed, ref, onMounted } from 'vue';
+  const props = defineProps({
+    idChart: Number,
+    from: String, 
+    data: String,
+  })
+  console.log(props.idChart)
 
-})
-
-onMounted(()=>{
- 
- const ctx = document.getElementById(props.idChart);
-  const myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      datasets: [
-        {
-            data: '',
-            label:"Hashrate",
-            borderColor: '#0068dd',
-            backgroundColor: '#0068dd',
-            cubicInterpolationMode: 'monotone',
-            pointRadius:0,
-            yAxisID: 'left-y-axis',
-            hidden: false
-        },
-      ]
-    },
-    options: {
-      maintainAspectRatio: false,
-      interaction: {
-        mode: 'index',
-        intersect: false,
-      },
-      plugins: {  
-        verticalLiner: {
-          line:{
-            dash: [1, 2],
-            color: 'red',
-            width: 1
-          }
-        },
-        legend: {
-          display:false,
-          labels: {
-            display:true,
-            usePointStyle: true,
-          },
-        },
-        tooltip: {
-          usePointStyle: true,
-          callbacks: {
-            labelPointStyle: function(context) {
-              return {
-                pointStyle: 'circule',
-                rotation: 0
-            };
-            },
-            
-          },
-          label: function(tooltipItems) {
-            console.log(tooltipItems)
-                  var text =  'Hashrate: ' +   + ' '  + formatHashrate(parseInt(tooltipItems.parsed.y))[0]  + formatHashrate(parseInt(tooltipItems.parsed.y))[1];
-                    return  text;
-            } ,
-        },
-        
-      },
-      scales: {
-        x: {
-          type: 'time',       
-          time: {
-            unit: 'hour',
-            displayFormats: {
-              minute:'HH:mm',
-              hour: 'HH:mm',
-              day: 'dd.MM',
-              week:'dd.MM.yy',
-            }
-          },
-        },
-        'left-y-axis': {
-          type: 'linear',
-          position: 'left',
-          title: {text:"-",display: true},
-          min: 0
-        },
-      }
-    },
-    plugins: [{
-      id: 'verticalLiner',
-      afterInit: (chart, args, opts) => {
-        chart.verticalLiner = {}
-      },
-      afterEvent: (chart, args, options) => {
-          const {inChartArea} = args
-          chart.verticalLiner = {draw: inChartArea}
-      },
-      beforeTooltipDraw: (chart, args, options) => {
-          const {draw} = chart.verticalLiner
-          if (!draw) return
-  
-          const {ctx} = chart
-          const {top, bottom} = chart.chartArea
-          const {tooltip} = args
-          const x = tooltip?.caretX
-          if (!x) return
-          ctx.save()
-          ctx.beginPath()
-          ctx.moveTo(x, top)
-          ctx.lineTo(x, bottom)
-          ctx.stroke()
-          ctx.restore()
-      }
-  }]
-
-  });
-  myChart.data.datasets[0].data = props.data;
-  myChart.update()
-  watch(props, (url, newUrl)=>{
-
-    myChart.data.datasets[0].data = props.data;
-    myChart.update()
-          
-        } 
+  ChartJS.register(CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
   )
+  const ass = ref(0)
+  const chartData = ref({
 
-});
+    datasets: [
+      {
+        label: 'Data One',
+        backgroundColor: '#f87979',
+        data: [12,11,12]
+      }
+    ]
+  })
+  const chartOptions = ref({
+    responsive: true,
+    maintainAspectRatio: false
+  })
 
-
+  onMounted(()=>{
+   console.log(props.data)
+    chartData.value.datasets[0].data = props.data;
+   ass.value++
+  })
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
