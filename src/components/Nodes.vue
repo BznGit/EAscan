@@ -2,20 +2,20 @@
   <h1>Nodes</h1>
 
   <div class="node noborder">
-<tabel class = "info-tabel">
+<table class = "info-tabel">
   <tr v-for = "(value, name) in inf" key = "name" >    
           <td >{{ name }}:</td>
           <router-link v-if="name =='topSnapshotHash'" :to="`/snapshot/` + value">{{ value }}</router-link>
           <td v-else>{{ value }}</td>
         </tr>
-      </tabel> 
+      </table> 
        <div class="chart">
           <Chart :idChart = "45" :data = "chart"/>
       </div>  
   </div>
  <h2>Pools</h2>
     <div class="node" v-for="(node, index) in nodes" key = "node">
-      <tabel class = "info-tabel">
+      <table class = "info-tabel">
         <tr >
           <td>Node: </td>
           <td><router-link  :to="`/pool/` + node.node">{{ node.node }}</router-link></td>
@@ -25,7 +25,7 @@
           <td><a :href ="`http://` + node.url" > {{ node.url }}</a></td>
         </tr>
 
-      </tabel>
+      </table>
 
     </div>
  
@@ -43,9 +43,7 @@
     const route = useRoute()
 
     axios.get('/nodes').then(res=>{nodes.value = res.data; inf =res.data[0].data.ea })
-    
     axios.get('/chart/day').then(res=>chart = res.data.entries.map(item=>{return {x: item.sliceTime, y: formatHashrate(parseInt(item.hashRate))[0]}}))
-
 
   </script>
   

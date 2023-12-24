@@ -5,14 +5,14 @@
 
 <script setup>
 import axios from 'axios';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, onUpdated, watch } from 'vue';
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 import { formatHashrate } from "../utils/utils.js";
 const props = defineProps({
-  idChart: String,
+  idChart: Number,
   from: String, 
-  data: String,
+  data: Object,
 
 })
 
@@ -135,7 +135,9 @@ onMounted(()=>{
   )
 
 });
-
+onUpdated(() => {
+      console.log('обновлён!')
+    })
 
 </script>
 
