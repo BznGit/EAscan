@@ -24,6 +24,36 @@
   })
   console.log(props.idChart)
   const line = ref(null)
+  const plugin = {
+    
+      id: 'verticalLiner',
+      afterInit: (chart, args, opts) => {
+        console.log(chart)
+        chart.verticalLiner = {}
+      },
+      afterEvent: (chart, args, options) => {
+          const {inChartArea} = args
+          chart.verticalLiner = {draw: inChartArea}
+      },
+      beforeTooltipDraw: (chart, args, options) => {
+          const {draw} = chart.verticalLiner
+          if (!draw) return
+  
+          const {ctx} = chart
+          const {top, bottom} = chart.chartArea
+          const {tooltip} = args
+          const x = tooltip?.caretX
+          if (!x) return
+          ctx.save()
+          ctx.beginPath()
+          ctx.moveTo(x, top)
+          ctx.lineTo(x, bottom)
+          ctx.stroke()
+          ctx.restore()
+      }
+  
+}
+
   ChartJS.register(CategoryScale,
     LinearScale,
     PointElement,
@@ -31,12 +61,13 @@
     Title,
     Tooltip,
     Legend, 
-    TimeScale,
+    TimeScale, plugin
   )
   const ass = ref(0)
-  const chartOptions = computed(()=>{
+  let chartOptions = ref({})
+  onMounted(()=>{
    
-    return {
+    chartOptions =  {
     maintainAspectRatio: false,
       interaction: {
         mode: 'index',
@@ -97,33 +128,7 @@
         },
       },
   
-    plugins: [{
-      id: 'verticalLiner',
-      afterInit: (chart, args, opts) => {
-        console.log(chart)
-        chart.verticalLiner = {}
-      },
-      afterEvent: (chart, args, options) => {
-          const {inChartArea} = args
-          chart.verticalLiner = {draw: inChartArea}
-      },
-      beforeTooltipDraw: (chart, args, options) => {
-          const {draw} = chart.verticalLiner
-          if (!draw) return
-  
-          const {ctx} = chart
-          const {top, bottom} = chart.chartArea
-          const {tooltip} = args
-          const x = tooltip?.caretX
-          if (!x) return
-          ctx.save()
-          ctx.beginPath()
-          ctx.moveTo(x, top)
-          ctx.lineTo(x, bottom)
-          ctx.stroke()
-          ctx.restore()
-      }
-  }]
+    plugins: []
 }
   }
 )
@@ -145,6 +150,8 @@
       ]
     }
   })
+
+
 
 </script>
 
