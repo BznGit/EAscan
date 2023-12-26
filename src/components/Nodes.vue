@@ -43,7 +43,7 @@
     const route = useRoute()
 
     axios.get('/nodes').then(res=>{nodes.value = res.data; inf =res.data[0].data.ea })
-    axios.get('/chart/day').then(res=>chart = res.data.entries.map(item=>{return {x: item.sliceTime, y: formatHashrate(parseInt(item.hashRate))[0]}}))
+    axios.get('/chart/day').then(res=>chart = res.data.entries.map(item=>{return {x: new Date(item.sliceTime), y: formatHashrate(parseInt(item.hashRate))[0]}}))
 
   </script>
   

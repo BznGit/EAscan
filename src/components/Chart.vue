@@ -79,7 +79,7 @@ onMounted(()=>{
         x: {
           type: 'time',       
           time: {
-            unit: 'hour',
+            unit: 'minute',
             displayFormats: {
               minute:'HH:mm',
               hour: 'HH:mm',
