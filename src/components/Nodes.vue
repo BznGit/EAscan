@@ -2,20 +2,20 @@
   <h1>Nodes</h1>
 
   <div class="node noborder">
-<tabel class = "info-tabel">
+<table class = "info-tabel">
   <tr v-for = "(value, name) in inf" key = "name" >    
           <td >{{ name }}:</td>
           <router-link v-if="name =='topSnapshotHash'" :to="`/snapshot/` + value">{{ value }}</router-link>
           <td v-else>{{ value }}</td>
         </tr>
-      </tabel> 
+      </table> 
        <div class="chart">
           <Chart :idChart = "45" :data = "chart"/>
       </div>  
   </div>
  <h2>Pools</h2>
     <div class="node" v-for="(node, index) in nodes" key = "node">
-      <tabel class = "info-tabel">
+      <table class = "info-tabel">
         <tr >
           <td>Node: </td>
           <td><router-link  :to="`/pool/` + node.node">{{ node.node }}</router-link></td>
@@ -25,7 +25,7 @@
           <td><a :href ="`http://` + node.url" > {{ node.url }}</a></td>
         </tr>
 
-      </tabel>
+      </table>
 
     </div>
  

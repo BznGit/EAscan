@@ -13,11 +13,11 @@
     Title,
     Tooltip,
     Legend } from 'chart.js'
-  import { computed, ref, onMounted } from 'vue';
+  import { onUpdated, ref, onMounted } from 'vue';
   const props = defineProps({
     idChart: Number,
     from: String, 
-    data: String,
+    data: Object,
   })
   console.log(props.idChart)
 
@@ -48,8 +48,9 @@
   onMounted(()=>{
    console.log(props.data)
     chartData.value.datasets[0].data = props.data;
-   ass.value++
+    ass.value++
   })
+  onUpdated(()=>ass.value++)
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
