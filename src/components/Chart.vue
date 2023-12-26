@@ -1,10 +1,10 @@
 <template>
- <Line :data="chartData" :options="chartOptions"  :key = "ass"/>
-  <canvas  :id="idChart" width="400" height="200"></canvas>
+ <Line :data="chartData" :options="chartOptions" ref="line" :key = "ass"/>
+ 
 </template>
 
 <script setup>
-  import { Line } from 'vue-chartjs'
+  import { Line, useLineChart } from 'vue-chartjs'
   import { Chart as ChartJS,
     CategoryScale,
     LinearScale,
@@ -23,7 +23,7 @@
     data: Object,
   })
   console.log(props.idChart)
-
+  const line = ref(null)
   ChartJS.register(CategoryScale,
     LinearScale,
     PointElement,
@@ -34,8 +34,8 @@
     TimeScale,
   )
   const ass = ref(0)
-
   const chartOptions = computed(()=>{
+   
     return {
     maintainAspectRatio: false,
       interaction: {
@@ -80,7 +80,7 @@
         x: {
           type: 'time',       
           time: {
-            unit: 'hour',
+            unit: 'minute',
             displayFormats: {
               minute:'HH:mm',
               hour: 'HH:mm',
@@ -100,6 +100,7 @@
     plugins: [{
       id: 'verticalLiner',
       afterInit: (chart, args, opts) => {
+        console.log(chart)
         chart.verticalLiner = {}
       },
       afterEvent: (chart, args, options) => {
@@ -127,21 +128,21 @@
   }
 )
   const { data } = toRefs(props)
-  const chartData = computed(()=>
-  {
+  const chartData = computed(()=>{
     console.log(props.data)
-     return {datasets: [
-      {
-        label:"Hashrate",
-            borderColor: '#0068dd',
-            backgroundColor: '#0068dd',
-            cubicInterpolationMode: 'monotone',
-            pointRadius:0,
-            yAxisID: 'left-y-axis',
-            hidden: false,
-        data: props.data
-      }
-    ]
+     return {
+      datasets: [
+        {
+          label:"Hashrate",
+          borderColor: '#0068dd',
+          backgroundColor: '#0068dd',
+          cubicInterpolationMode: 'monotone',
+          pointRadius:0,
+          yAxisID: 'left-y-axis',
+          hidden: false,
+          data: props.data
+        }
+      ]
     }
   })
 
