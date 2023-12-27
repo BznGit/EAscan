@@ -5,7 +5,7 @@
 <script setup>
   import { Line, mixins, renderChart  } from 'vue-chartjs';
 
-  import { ref,  computed, watch, onMounted } from 'vue';
+  import { ref,  computed, watch, onUpdated } from 'vue';
   import 'chartjs-adapter-date-fns';
   import { Chart as ChartJS,
     CategoryScale,
@@ -58,18 +58,19 @@
     Tooltip,
     Legend, 
     TimeScale, 
-    plugin
+    plugin, 
   )
 
   let chartOptions = computed(()=>{
    return {
     maintainAspectRatio: false,
+    
     interaction: {
       mode: 'index',
       intersect: false,
     },
     plugins: {  
-      verticalLiner: {
+      plugin: {
         line:{
           dash: [1, 2],
           color: 'red',
