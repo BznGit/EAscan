@@ -2,7 +2,7 @@
   <h1>Snapshot </h1>
   <h2>{{ snapshots.snapshotHash }}</h2>
   <div class="node">
-    <tabel class = "info-tabel">
+    <table class = "info-tabel">
       <tr  v-for = "(value, name) in snapshots" key = "snapshot">
         <td v-if="name !='_id'">{{ name }}: </td>
         <router-link v-if="name =='parentSnapshotHash'" :to="`/snapshot/` + value">{{ value }}</router-link>
@@ -14,7 +14,7 @@
         
         <td v-else-if="name !='_id'">{{ value }}</td>
       </tr>
-    </tabel>
+    </table>
   </div>
 </template>
 
@@ -28,13 +28,13 @@
   const route = useRoute()
   let snapshots = ref({})
   axios.get('/snapshot/' + route.params.hash).then(res=>snapshots.value = res.data)
-  let hash = ref(route.params.hash)
+
   watch(route, (url, newUrl)=>{
         console.log('-->',url, route.params.hash)
         axios.get('/snapshot/' + route.params.hash).then(res=>snapshots.value = res.data)
         
-      } 
-    )
+    } 
+  )
 
 
 </script>

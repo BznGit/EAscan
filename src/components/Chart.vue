@@ -1,10 +1,12 @@
 <template>
- <Line :data="chartData" :options="chartOptions" ref="line" :key = "ass"/>
- 
+ <Line :data="chartData" :options="chartOptions"/>
 </template>
 
 <script setup>
-  import { Line, useLineChart } from 'vue-chartjs'
+  import { Line, mixins, renderChart  } from 'vue-chartjs';
+
+  import { ref,  computed, watch, onMounted } from 'vue';
+  import 'chartjs-adapter-date-fns';
   import { Chart as ChartJS,
     CategoryScale,
     LinearScale,
@@ -14,142 +16,131 @@
     Tooltip,
     TimeScale,
     Legend } from 'chart.js'
-  import { watch, ref, onMounted, toRefs, computed } from 'vue';
-  import 'chartjs-adapter-date-fns';
+ 
+  const plugin = {
+    id: 'verticalLiner',
+    afterInit: (chart, args, opts) => {
+      chart.verticalLiner = {}
+    },
+    afterEvent: (chart, args, options) => {
+        const {inChartArea} = args
+        chart.verticalLiner = {draw: inChartArea}
+    },
+    beforeTooltipDraw: (chart, args, options) => {
+        const {draw} = chart.verticalLiner
+        if (!draw) return
 
+        const {ctx} = chart
+        const {top, bottom} = chart.chartArea
+        const {tooltip} = args
+        const x = tooltip?.caretX
+        if (!x) return
+        ctx.save()
+        ctx.beginPath()
+        ctx.moveTo(x, top)
+        ctx.lineTo(x, bottom)
+        ctx.stroke()
+        ctx.restore()
+    }
+  }
   const props = defineProps({
     idChart: Number,
     from: String, 
     data: Object,
+    koef: String
   })
-  console.log(props.idChart)
-  const line = ref(null)
-  const plugin = {
-    
-      id: 'verticalLiner',
-      afterInit: (chart, args, opts) => {
-        console.log(chart)
-        chart.verticalLiner = {}
-      },
-      afterEvent: (chart, args, options) => {
-          const {inChartArea} = args
-          chart.verticalLiner = {draw: inChartArea}
-      },
-      beforeTooltipDraw: (chart, args, options) => {
-          const {draw} = chart.verticalLiner
-          if (!draw) return
-  
-          const {ctx} = chart
-          const {top, bottom} = chart.chartArea
-          const {tooltip} = args
-          const x = tooltip?.caretX
-          if (!x) return
-          ctx.save()
-          ctx.beginPath()
-          ctx.moveTo(x, top)
-          ctx.lineTo(x, bottom)
-          ctx.stroke()
-          ctx.restore()
-      }
-  
-}
-
-  ChartJS.register(CategoryScale,
+  ChartJS.register(
+    CategoryScale,
     LinearScale,
     PointElement,
     LineElement,
     Title,
     Tooltip,
     Legend, 
-    TimeScale, plugin
+    TimeScale, 
+    plugin
   )
-  const ass = ref(0)
-  let chartOptions = ref({})
-  onMounted(()=>{
-   
-    chartOptions =  {
+
+  let chartOptions = computed(()=>{
+   return {
     maintainAspectRatio: false,
-      interaction: {
-        mode: 'index',
-        intersect: false,
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
+    plugins: {  
+      verticalLiner: {
+        line:{
+          dash: [1, 2],
+          color: 'red',
+          width: 1
+        }
       },
-      plugins: {  
-        verticalLiner: {
-          line:{
-            dash: [1, 2],
-            color: 'red',
-            width: 1
-          }
+      legend: {
+        display:true,
+        labels: {
+          display:true,
+          usePointStyle: false,
         },
-        legend: {
-          display:false,
-          labels: {
-            display:true,
-            usePointStyle: true,
-          },
-        },
-        tooltip: {
-          usePointStyle: true,
-          callbacks: {
-            labelPointStyle: function(context) {
-              return {
-                pointStyle: 'circule',
-                rotation: 0
+      },
+      tooltip: {
+        usePointStyle: true,
+        callbacks: {
+          labelPointStyle: function(context) {
+            return {
+              pointStyle: 'circule',
+              rotation: 0
             };
-            },
-            
           },
           label: function(tooltipItems) {
-            console.log(tooltipItems)
-                  var text =  'Hashrate: ' +   + ' '  + formatHashrate(parseInt(tooltipItems.parsed.y))[0]  + formatHashrate(parseInt(tooltipItems.parsed.y))[1];
-                    return  text;
-            } ,
-        },
-        
-      },
-      scales: {
-        x: {
-          type: 'time',       
-          time: {
-            unit: 'minute',
-            displayFormats: {
-              minute:'HH:mm',
-              hour: 'HH:mm',
-              day: 'dd.MM',
-              week:'dd.MM.yy',
-            }
-          },
-        },
-        'left-y-axis': {
-          type: 'linear',
-          position: 'left',
-          title: {text:"-",display: true},
-          min: 0
-        },
-      },
-  
-    plugins: []
-}
-  }
-)
-  const { data } = toRefs(props)
-  const chartData = computed(()=>{
-    console.log(props.data)
-     return {
-      datasets: [
-        {
-          label:"Hashrate",
-          borderColor: '#0068dd',
-          backgroundColor: '#0068dd',
-          cubicInterpolationMode: 'monotone',
-          pointRadius:0,
-          yAxisID: 'left-y-axis',
-          hidden: false,
-          data: props.data
+            return 'Hashrate: '  + tooltipItems.parsed.y + ' ' + props.koef;
+          }
         }
-      ]
-    }
-  })
+      }
+    },
+    scales: {
+      x: {
+        type: 'time',       
+        time: {
+          unit: 'minute',
+          displayFormats: {
+            minute:'HH:mm',
+            hour: 'HH:mm',
+            day: 'dd.MM',
+            week:'dd.MM.yy',
+          }
+        },
+      },
+      'left-y-axis': {
+        type: 'linear',
+        position: 'left',
+        title: {text:"-",display: true},
+        min: 0
+      },
+    }  
+  }   
+})
+
+const chartData = computed(()=>{
+  console.log(props.data)
+    
+    return {
+    datasets: [
+      {
+        label:"Hashrate",
+        borderColor: '#0068dd',
+        backgroundColor: '#0068dd',
+        cubicInterpolationMode: 'monotone',
+        pointRadius:0,
+        yAxisID: 'left-y-axis',
+        hidden: false,
+        data: props.data
+      }
+    ] 
+  }
+})
+
+
 
 
 
