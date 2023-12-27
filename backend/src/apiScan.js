@@ -59,8 +59,8 @@ const  apiScanStarter  = function(){
                     api.getPools().then(res=>{
                         if(!res) return;
                         res.forEach(async function(element){
-                            let hourlyChart = await api.getHourlyChart();
-                            let dailyChart = await api.getDailyChart();
+                            let hourlyChart = await api.getHourlyChart(element.node);
+                            let dailyChart = await api.getDailyChart(element.node);
                             element.hourlyChart =  hourlyChart;
                             element.dailyChart =  dailyChart;
                             db.updatePools(element);

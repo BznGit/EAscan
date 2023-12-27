@@ -1,5 +1,5 @@
 <template>
-  <h1>Nodes</h1>
+  <h1>Frea network</h1>
 
   <div class="node noborder">
 <table class = "info-tabel">
@@ -36,7 +36,7 @@
   </template>
   <script setup>
     import axios from 'axios';
-    import { ref, onUpdated } from 'vue';
+    import { ref } from 'vue';
     import Chart from '@/components/Chart.vue';
     import { formatHashrate } from "../utils/utils.js";
     
@@ -47,15 +47,15 @@
 
     axios.get('/nodes').then(res=>{nodes.value = res.data; inf = res.data[0].data.ea })
     axios.get('/chart/day').then(res=>{
-        chart.value = res.data.entries.map(item=>{
-          return {
-            x: new Date(item.sliceTime),
-            y: formatHashrate(parseInt(item.hashRate))[0]
-          }
-        })
-        console.log('chart>>', chart)
-        koef = formatHashrate(parseInt(res.data.entries[0].hashRate))[1]
+      chart.value = res.data.entries.map(item=>{
+        return {
+          x: new Date(item.sliceTime),
+          y: formatHashrate(parseInt(item.hashRate))[0]
+        }
       })
+      console.log('chart>>', chart)
+      koef = formatHashrate(parseInt(res.data.entries[0].hashRate))[1]
+    })
 
   </script>
   

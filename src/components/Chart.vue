@@ -123,7 +123,7 @@
 })
 
 const chartData = computed(()=>{
-  console.log(props.data)
+
     
     return {
     datasets: [

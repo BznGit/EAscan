@@ -1,6 +1,7 @@
 <template>
   <h1>Pool</h1>
-  <table>
+  <div class="row">
+    <table>
       <tr>
         <td>URL: </td>
         <td>
@@ -24,23 +25,55 @@
         <td v-else-if="name !='_id' && name !='node'">{{ value }}</td>
       </tr>
     </table>
- 
+    <div class="chart">
+      <Chart :idChart = "44"  :data = "chart" :koef = "koef"/>
+    </div>
+  </div>  
    
-  </template>
-  <script setup>
+</template>
+<script setup>
     import axios from 'axios';
     import {  ref  } from 'vue';
     import { useRoute } from 'vue-router';
+    import Chart from '@/components/Chart.vue';
+    import { formatHashrate } from "../utils/utils.js";
 
-    const route = useRoute()
+    const route = useRoute();
+    const chart = ref({})
     console.log(route.params.ip)
     let pool = ref({})
-    axios.get('/pool/' + route.params.ip).then(res=>pool.value = res.data)
+    let koef = ref({})
+    axios.get('/pool/' + route.params.ip).then(res=>{
+      chart.value = res.data.hourlyChart.map(item=>{
+        return {
+          x: new Date(item.sliceTime),
+          y: formatHashrate(parseInt(item.sliceWork) * Math.pow(2, 32) / item.sliceDuration/1000)[0]
+        }
+    })
+    koef = formatHashrate(parseInt(res.data.dailyChart[0].sliceWork) * Math.pow(2, 32)/res.data.hourlyChart[0].sliceDuration/1000)[1]
+    console.log(res.data.dailyChart[0].sliceWork)
+    console.log(Math.pow(2, 32))
+    console.log(res.data.hourlyChart[0].sliceDuration)
+    let ln = res.data.dailyChart.length-1
+    console.log(formatHashrate(parseInt(res.data.dailyChart[0].sliceWork) * Math.pow(2, 32)/res.data.hourlyChart[0].sliceDuration/1000))
+    pool.value = res.data;
+    
+  })
 
-
-  </script>
+</script>
   
-  <style scoped lang="scss">
+<style scoped lang="scss">
+  .row{
+    display: flex;
+    flex-direction: row;
+  }
+  .chart{
+    display: flex;
+    justify-self: center;
+    align-self: center;
+    width: 50%;
+   
+  }
 .up{ 
     vertical-align: top
   }

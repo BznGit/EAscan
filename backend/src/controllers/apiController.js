@@ -146,10 +146,11 @@ async getHourlyChartEA(){
   };
 
   // Запрос HourlyChart --------------------------------------------------------------------------------/
-  async getHourlyChart(){
+  async getHourlyChart(node){
+    
     let obj = null;
     try{
-      await axios.get('http://' + blockchainEA + ':7000/hourlyChart/', {agent:false}).then(res => {
+      await axios.get('http://' + node + ':7000/hourlyChart/', {agent:false}).then(res => {
         obj = res.data;  
       })
     }catch(err){
@@ -159,10 +160,10 @@ async getHourlyChartEA(){
   };
 
     // Запрос dailyChart--------------------------------------------------------------------------------/
-    async getDailyChart(){
+    async getDailyChart(node){
       let obj = null;
       try{
-        await axios.get('http://' + blockchainEA + ':7000/dailyChart/', {agent:false}).then(res => {
+        await axios.get('http://' + node + ':7000/dailyChart/', {agent:false}).then(res => {
           obj = res.data;  
         })
       }catch(err){
