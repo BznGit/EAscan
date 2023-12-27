@@ -16,7 +16,7 @@
  import {  ref  } from 'vue';
  const vis = ref(false)
   const props = defineProps({
-  data: String
+  data: Object
 })
 
 </script>

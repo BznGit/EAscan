@@ -3,18 +3,21 @@
 
   <div class="node noborder">
 <table class = "info-tabel">
+<table class = "info-tabel">
   <tr v-for = "(value, name) in inf" key = "name" >    
           <td >{{ name }}:</td>
           <router-link v-if="name =='topSnapshotHash'" :to="`/snapshot/` + value">{{ value }}</router-link>
           <td v-else>{{ value }}</td>
         </tr>
       </table> 
+      </table> 
        <div class="chart">
-          <Chart :idChart = "45" :data = "chart"/>
+          <Chart :idChart = "45" :data = "chart" :koef = "koef"/>
       </div>  
   </div>
  <h2>Pools</h2>
     <div class="node" v-for="(node, index) in nodes" key = "node">
+      <table class = "info-tabel">
       <table class = "info-tabel">
         <tr >
           <td>Node: </td>
@@ -26,24 +29,33 @@
         </tr>
 
       </table>
+      </table>
 
     </div>
  
   </template>
   <script setup>
     import axios from 'axios';
-    import { ref, watch } from 'vue';
+    import { ref, onUpdated } from 'vue';
     import Chart from '@/components/Chart.vue';
     import { formatHashrate } from "../utils/utils.js";
-    import { useRoute } from 'vue-router';
     
     let nodes = ref({});
     let inf = ref({})
     let chart = ref({});
-    const route = useRoute()
+    let koef = ref()
 
-    axios.get('/nodes').then(res=>{nodes.value = res.data; inf =res.data[0].data.ea })
-    axios.get('/chart/day').then(res=>chart = res.data.entries.map(item=>{return {x: new Date(item.sliceTime), y: formatHashrate(parseInt(item.hashRate))[0]}}))
+    axios.get('/nodes').then(res=>{nodes.value = res.data; inf = res.data[0].data.ea })
+    axios.get('/chart/day').then(res=>{
+        chart.value = res.data.entries.map(item=>{
+          return {
+            x: new Date(item.sliceTime),
+            y: formatHashrate(parseInt(item.hashRate))[0]
+          }
+        })
+        console.log('chart>>', chart)
+        koef = formatHashrate(parseInt(res.data.entries[0].hashRate))[1]
+      })
 
   </script>
   

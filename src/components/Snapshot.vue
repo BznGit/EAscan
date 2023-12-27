@@ -28,13 +28,13 @@
   const route = useRoute()
   let snapshots = ref({})
   axios.get('/snapshot/' + route.params.hash).then(res=>snapshots.value = res.data)
-  let hash = ref(route.params.hash)
+
   watch(route, (url, newUrl)=>{
         console.log('-->',url, route.params.hash)
         axios.get('/snapshot/' + route.params.hash).then(res=>snapshots.value = res.data)
         
-      } 
-    )
+    } 
+  )
 
 
 </script>
