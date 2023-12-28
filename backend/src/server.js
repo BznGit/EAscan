@@ -29,13 +29,13 @@ let MainApp = class {
                       }
                   },
                   {
-                    from: /^\/miner\/*/,
+                    from: /^\/miner\/*$/,
                     to: function (context) {
                        return context.parsedUrl.path
                       }
                   },
                   {
-                    from: /^\/pool\/*/,
+                    from: /^\/pool\/*$/,
                     to: function (context) {
                        return context.parsedUrl.path
                       }
