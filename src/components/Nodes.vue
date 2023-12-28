@@ -21,7 +21,7 @@
       <table class = "info-tabel">
         <tr >
           <td>Node: </td>
-          <td><router-link  :to="`/pool/` + node.node">{{ node.node }}</router-link></td>
+          <td><router-link  :to="`/pool/` + node.node.replace(/[\.\/]/g,'-')">{{ node.node }}</router-link></td>
         </tr>
         <tr>
           <td>Pool url: </td>

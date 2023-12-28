@@ -17,7 +17,7 @@
           </tr>
         </td>
         <td v-else-if="name !='_id' && name !='node'">{{ value }}</td>
-        <router-link v-if = "name =='node'" :to="`/pool/` + value">{{ value }}</router-link>
+        <router-link v-if = "name =='node'" :to="`/pool/` + value.replace(/[\.\/]/g,'-')">{{ value }}</router-link>
       </tr>
     </table>
   

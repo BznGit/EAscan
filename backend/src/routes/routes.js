@@ -48,7 +48,9 @@ route.get('/miner/:id', function(req, res, next){
 
 route.get('/pool/:ip', function(req, res, next){
     console.log('/pool: ', req.params.ip)
-    db.getPool(req.params.ip).then((pool)=>{         
+    let node = req.params.ip.replace(/[\-\/]/g,'.')
+    console.log(node)
+    db.getPool(node).then((pool)=>{         
         if(pool){
             res.send(pool);
             res.end();

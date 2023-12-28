@@ -32,20 +32,23 @@
    
 </template>
 <script setup>
-        import {  ref  } from 'vue';
+    import axios from 'axios';
+    import {  ref  } from 'vue';
     import { useRoute } from 'vue-router';
     import Chart from '@/components/Chart.vue';
+    import { formatHashrate } from "../utils/utils.js";
 
-    export const route = useRoute();
-    export const chart = ref([])
+    const route = useRoute();
+    const chart = ref([])
     console.log(route.params.ip)
-    export let pool = ref({})
-    export let koef = ref()
+    let pool = ref({})
+    let koef = ref()
     axios.get('/pool/' + route.params.ip).then(res=>{
       chart.value = res.data.hourlyChart.map(item=>{
+        //console.log(item.sliceDuration/1000)
         return {
           x: new Date(item.sliceTime),
-          y: formatHashrate((item.sliceWork) * 2^32 / (item.sliceDuration/1000))[0]
+          y: formatHashrate((item.sliceWork) * Math.pow(2, 32) / (item.sliceDuration/1000))[0]
         }
     })
     koef = formatHashrate(res.data.dailyChart[0].sliceWork * Math.pow(2, 32)/res.data.hourlyChart[0].sliceDuration/1000)[1]
