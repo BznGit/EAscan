@@ -5,7 +5,7 @@
     <table class = "info-tabel">
       <tr  v-for = "(value, name) in snapshots" key = "snapshot">
         <td v-if="name !='_id'">{{ name }}: </td>
-        <router-link v-if="name =='parentSnapshotHash'" :to="`/snapshot/` + value">{{ value }}</router-link>
+        <td v-if="name =='parentSnapshotHash'"><router-link  :to="`/snapshot/` + value">{{ value }}</router-link></td>
         <slot v-else-if = "name == 'Solution'" ><Solution :data="value"/></slot>
         <slot v-else-if = "name == 'Shares'" ><Shares :data="value" :name ="'Share'"/></slot>
         <slot v-else-if = "name == 'ValidatorsEntries'" ><Shares :data="value" :name ="'Validators entries'"/></slot>
