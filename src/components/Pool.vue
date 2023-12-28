@@ -12,11 +12,11 @@
         <td v-if = "name != '_id'">{{ name }}: </td>
         <td class="up" v-if="name =='miners'">
           <tr v-for = "(value1, name1 ) in value">  
-            <td class="up">{{ name1 }} >  </td>
+            <td class="up">{{ name1 }}></td>
             <td v-if="name1 =='hr'">
-              <tr v-for = "(value2, name2 ) in value1">  
-                <router-link :to="`/miner/` + name2"> {{ name2 }}</router-link>
-                <td>: {{ value2 }} </td>
+              <tr class="up"  v-for = "(value2, name2) in value1">  
+                <td> <router-link class="up" :to="`/miner/` + name2"> {{ name2 }}: </router-link></td>
+                <td> {{ value2 }} </td>
               </tr>
             </td> 
             <td v-else>{{ value1 }} </td>
@@ -39,23 +39,24 @@
     import { formatHashrate } from "../utils/utils.js";
 
     const route = useRoute();
-    const chart = ref({})
+    const chart = ref([])
     console.log(route.params.ip)
     let pool = ref({})
-    let koef = ref({})
+    let koef = ref()
     axios.get('/pool/' + route.params.ip).then(res=>{
       chart.value = res.data.hourlyChart.map(item=>{
+        //console.log(item.sliceDuration/1000)
         return {
           x: new Date(item.sliceTime),
-          y: formatHashrate(parseInt(item.sliceWork) * Math.pow(2, 32) / item.sliceDuration/1000)[0]
+          y: formatHashrate((item.sliceWork) * 2^32 / (item.sliceDuration/1000))[0]
         }
     })
-    koef = formatHashrate(parseInt(res.data.dailyChart[0].sliceWork) * Math.pow(2, 32)/res.data.hourlyChart[0].sliceDuration/1000)[1]
+    koef = formatHashrate(res.data.dailyChart[0].sliceWork * Math.pow(2, 32)/res.data.hourlyChart[0].sliceDuration/1000)[1]
     console.log(res.data.dailyChart[0].sliceWork)
     console.log(Math.pow(2, 32))
     console.log(res.data.hourlyChart[0].sliceDuration)
     let ln = res.data.dailyChart.length-1
-    console.log(formatHashrate(parseInt(res.data.dailyChart[0].sliceWork) * Math.pow(2, 32)/res.data.hourlyChart[0].sliceDuration/1000))
+    console.log(formatHashrate(parseInt(res.data.dailyChart[ln].sliceWork) * Math.pow(2, 32)/res.data.hourlyChart[ln].sliceDuration))
     pool.value = res.data;
     
   })
@@ -75,13 +76,18 @@
    
   }
 .up{ 
-    vertical-align: top
+    vertical-align: top;
+ 
+
   }
   table{
 
     border-collapse: collapse;
     text-align: left;
     vertical-align: top
+  }
+  td{
+
   }
   </style>
   
