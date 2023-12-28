@@ -11,7 +11,7 @@ const  apiScanStarter  = function(){
     api.getGeneral().then((res)=>{
         if(!res) return;
         //console.log(res)
-        if(oldTopSnapshotHash ==  res.ea.topSnapshotHash) oldTopSnapshotHash = res.ea.topSnapshotHash; 
+        if(oldTopSnapshotHash !=  res.ea.topSnapshotHash) oldTopSnapshotHash = res.ea.topSnapshotHash;  //  <-- Ускорение  исправлять здесь: ("!=")
         console.log('Scaning started!');
     }).then(()=>{
         
@@ -20,9 +20,11 @@ const  apiScanStarter  = function(){
                 if(!res) return;
                     
                 // Определение нового блока --------------------------------------------
-                if (oldTopSnapshotHash != res.ea.topSnapshotHash){  //  <-- Ускорение  исправлять здесь: ("!=")
+                if (oldTopSnapshotHash != res.ea.topSnapshotHash){ 
+                    console.log('Old snapshor: ', oldTopSnapshotHash);
                     oldTopSnapshotHash = res.ea.topSnapshotHash;
                     
+                    console.log('New snapshor: ', oldTopSnapshotHash);
                     // Получение и сохранение инфы по нодам ----------------------------
                     api.getNodes().then((res)=>{
                         if(!res) return;
