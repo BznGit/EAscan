@@ -56,7 +56,7 @@ let ApiController = class {
                 if (item.status=='fulfilled'){
                     let nodeInf = item.value.data;
                     let currUrl =  item.value.request.res.responseUrl;
-                    nodes.push({node: currUrl.slice(7, -13),  data: nodeInf })
+                    nodes.push({node: currUrl.slice(7, -14),  data: nodeInf })
                     i++ 
                 }
               })     
@@ -65,6 +65,7 @@ let ApiController = class {
       console.log('Api getNodes reguest error!>>', err);
     }
     let arr =[];
+    console.log('nodes api>>',nodes)
     arrNodes.forEach((item)=>{
       let node = nodes.find(elem=>elem.node==item.node);
       if(node!=undefined){
@@ -73,6 +74,7 @@ let ApiController = class {
         arr.push(obj)
       } 
     })
+    console.log('arr api>>',arr)
     return arr 
   };
 

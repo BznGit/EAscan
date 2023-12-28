@@ -11,7 +11,7 @@ const  apiScanStarter  = function(){
     api.getGeneral().then((res)=>{
         if(!res) return;
         //console.log(res)
-        if(oldTopSnapshotHash !=  res.ea.topSnapshotHash) oldTopSnapshotHash = res.ea.topSnapshotHash;  //  <-- Ускорение  исправлять здесь: ("!=")
+        if(oldTopSnapshotHash !=  res.ea.topSnapshotHash) {oldTopSnapshotHash = res.ea.topSnapshotHash;}  //  <-- Ускорение  исправлять здесь: ("!=")
         console.log('Scaning started!');
     }).then(()=>{
         
@@ -28,6 +28,7 @@ const  apiScanStarter  = function(){
                     // Получение и сохранение инфы по нодам ----------------------------
                     api.getNodes().then((res)=>{
                         if(!res) return;
+                        console.log('get nodes:>>>>>>>>> ', res); 
                         res.forEach(item =>{
                             db.updateNodes(item);
                         })
@@ -66,14 +67,19 @@ const  apiScanStarter  = function(){
                             element.hourlyChart =  hourlyChart;
                             element.dailyChart =  dailyChart;
                             db.updatePools(element);
+                            console.log('>+===============>',element)
                             let obj = element.data.miners.hr;
-                            for (let key in obj) {
-                                api.getMiner(key, element.node).then(res=>{
-                                    res.miner = key;
-                                    res.node = element.node
-                                    db.updateMiner(res)    
-                                })
+                           
+                            if (obj){
+                                for (let key in obj) {
+                                    api.getMiner(key, element.node).then(res=>{
+                                        res.miner = key;
+                                        res.node = element.node
+                                        db.updateMiner(res)    
+                                    })
+                                }
                             }
+                            
                         });
                         
                     });
