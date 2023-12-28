@@ -30,15 +30,20 @@
         const {draw} = chart.verticalLiner
         if (!draw) return
 
-        const {ctx} = chart
-        const {top, bottom} = chart.chartArea
+        const {ctx } = chart
+        const {top, bottom, left, right} = chart.chartArea
         const {tooltip} = args
         const x = tooltip?.caretX
+        const y = tooltip?.caretY
         if (!x) return
         ctx.save()
         ctx.beginPath()
+        ctx.setLineDash([5, 3])
+        ctx.strokeStyle = '#ff0000';
         ctx.moveTo(x, top)
         ctx.lineTo(x, bottom)
+        ctx.moveTo(left, y)
+        ctx.lineTo(right, y)
         ctx.stroke()
         ctx.restore()
     }
@@ -73,7 +78,7 @@
       plugin: {
         line:{
           dash: [1, 2],
-          color: 'red',
+          color: 'blue',
           width: 1
         }
       },
