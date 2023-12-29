@@ -53,7 +53,6 @@
           y: formatHashrate(parseInt(item.hashRate))[0]
         }
       })
-      console.log('chart>>', chart)
       koef = formatHashrate(parseInt(res.data.entries[0].hashRate))[1]
     })
 

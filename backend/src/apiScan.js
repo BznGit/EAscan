@@ -16,21 +16,20 @@ const  apiScanStarter  = function(){
     }).then(()=>{
         
         setInterval(() => {
-            api.getGeneral().then((res)=>{
+            api.getGeneral().then(async(res)=>{
                 if(!res) return;
                     
                 // Определение нового блока --------------------------------------------
                 if (oldTopSnapshotHash != res.ea.topSnapshotHash){ 
-                    console.log('Old snapshor: ', oldTopSnapshotHash);
+                    //console.log('Old snapshor: ', oldTopSnapshotHash);
                     oldTopSnapshotHash = res.ea.topSnapshotHash;
                     
-                    console.log('New snapshor: ', oldTopSnapshotHash);
+                   // console.log('New snapshor: ', oldTopSnapshotHash);
                     // Получение и сохранение инфы по нодам ----------------------------
-                    api.getNodes().then((res)=>{
+                    await api.getNodes().then((res)=>{
                         if(!res) return;
-                        console.log('get nodes:>>>>>>>>> ', res); 
                         res.forEach(item =>{
-                            db.updateNodes(item);
+                           db.updateNodes(item);
                         })
                     });
 
@@ -59,27 +58,24 @@ const  apiScanStarter  = function(){
                     });
 
                     // Получение и сохранение инфы по пулам ----- ----------------------
-                    api.getPools().then(res=>{
+                    api.getPools().then(res =>{
                         if(!res) return;
-                        res.forEach(async function(element){
-                            let hourlyChart = await api.getHourlyChart(element.node);
-                            let dailyChart = await api.getDailyChart(element.node);
-                            element.hourlyChart =  hourlyChart;
-                            element.dailyChart =  dailyChart;
-                            db.updatePools(element);
-                            console.log('>+===============>',element)
-                            let obj = element.data.miners.hr;
-                           
+                        res.forEach(async(pool)=>{
+                            let hourlyChart = await api.getHourlyChart(pool.node);
+                            let dailyChart = await api.getDailyChart(pool.node);
+                            pool.hourlyChart =  hourlyChart;
+                            pool.dailyChart =  dailyChart;
+                            db.updatePools(pool);
+                            let obj = pool.data.miners.hr;
                             if (obj){
                                 for (let key in obj) {
-                                    api.getMiner(key, element.node).then(res=>{
+                                    api.getMiner(key, pool.node).then(res=>{
                                         res.miner = key;
-                                        res.node = element.node
+                                        res.node = pool.node
                                         db.updateMiner(res)    
                                     })
                                 }
                             }
-                            
                         });
                         
                     });

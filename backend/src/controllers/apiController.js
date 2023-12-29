@@ -64,18 +64,16 @@ let ApiController = class {
     }catch(err){
       console.log('Api getNodes reguest error!>>', err);
     }
-    let arr =[];
-    console.log('nodes api>>',nodes)
+    let arr1 =[];
     arrNodes.forEach((item)=>{
       let node = nodes.find(elem=>elem.node==item.node);
       if(node!=undefined){
         let obj = item;
         item.data = node.data
-        arr.push(obj)
+        arr1.push(obj)
       } 
     })
-    console.log('arr api>>',arr)
-    return arr 
+    return arr1 
   };
 
   // Запрос POOLS -----------------------------------------------------------------------------/
@@ -153,6 +151,7 @@ async getHourlyChartEA(){
     let obj = null;
     try{
       await axios.get('http://' + node + ':7000/hourlyChart/', {agent:false}).then(res => {
+        //console.log(res.data)
         obj = res.data;  
       })
     }catch(err){
