@@ -9,10 +9,11 @@ let ApiController = class {
   async getPplns(){
     let obj = null;
     try{
-      await axios.get('http://' + blockchainEA + ':8888/pplns/', {agent:false, timeout: 1500}).then(res => {
+      await axios.get('http://' + blockchainEA + ':8888/pplns/').then(res => {
         obj = res.data;  
       })
     }catch(err){
+     
       console.log('Api pplns reguest error!>>',err);
     }
     return obj;  
@@ -22,7 +23,7 @@ let ApiController = class {
   async getGeneral(){
     let obj = null;
     try{
-      await axios.get('http://' + blockchainEA + ':8888' + '/general/', {agent:false, timeout: 1500}).then(res => {
+      await axios.get('http://' + blockchainEA + ':8888' + '/general/').then(res => {
         obj = res.data;  
       })
     }catch(err){
@@ -35,8 +36,8 @@ let ApiController = class {
   async getSnapShot(blockHash){
     let obj = null;
     try{
-      await axios.get('http://' + blockchainEA + ':8888'  + '/snapshot/' + blockHash,{agent:false}).then(res => {
-        obj = res.data;  
+      await axios.get('http://' + blockchainEA + ':8888'  + '/snapshot/' + blockHash).then(res => {
+        obj = res.data; 
       })
     }catch(err){
       console.log('Api getSnapShot reguest error!>>', err);
@@ -110,7 +111,7 @@ let ApiController = class {
   async getMiner(miner, node){
     let obj = null;
     try{
-      await axios.get('http://' + node + ':7000/miner/' + miner, {agent:false}).then(res => {
+      await axios.get('http://' + node + ':7000/miner/' + miner).then(res => {
         obj = res.data;  
       })
     }catch(err){
@@ -123,11 +124,11 @@ let ApiController = class {
 async getHourlyChartEA(){
   let obj = null;
   try{
-    await axios.get('http://' + blockchainEA + ':8888/hourlyChart/1111111', {agent:false}).then(res => {
+    await axios.get('http://' + blockchainEA + ':8888/hourlyChart/1111111').then(res => {
       obj = res.data;  
     })
   }catch(err){
-    console.log('Api getHourlyChart reguest error!>>',err);
+      console.log('Api getHourlyChart reguest error!>>',err);
   }
   return obj;  
 };
@@ -136,7 +137,7 @@ async getHourlyChartEA(){
   async getDailyChartEA(){
     let obj = null;
     try{
-      await axios.get('http://' + blockchainEA + ':8888/dailyChart/111111', {agent:false}).then(res => {
+      await axios.get('http://' + blockchainEA + ':8888/dailyChart/111111').then(res => {
         obj = res.data;  
       })
     }catch(err){

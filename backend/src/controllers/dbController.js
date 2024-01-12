@@ -21,7 +21,7 @@ let DbController = class {
     async updateNodes(data){
         try{ 
             let nodes = db.collection('nodes');
-           // console.log('-------------')
+           // console.log('----------')
             await nodes.replaceOne({node: data.node}, data, {upsert: true}); 
         }catch(err){
             console.log('db updateNodes error!', err);

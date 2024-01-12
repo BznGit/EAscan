@@ -58,7 +58,7 @@ const  apiScanStarter  = function(){
                     });
 
                     // Получение и сохранение инфы по пулам ----- ----------------------
-                    api.getPools().then(res =>{
+                    await api.getPools().then(res =>{
                         if(!res) return;
                         res.forEach(async(pool)=>{
                             let hourlyChart = await api.getHourlyChart(pool.node);
@@ -77,7 +77,6 @@ const  apiScanStarter  = function(){
                                 }
                             }
                         });
-                        
                     });
                 } 
             })
