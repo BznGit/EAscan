@@ -101,10 +101,13 @@ let DbController = class {
 
     // Get snapshot ---------------------------------------------------------- //
     async getSnapshot(hash){
-        try{              
+        try{    
+            let db = mongoClient.db('EAP');      
             let nodes = db.collection('snapshots');
-            let res = await nodes.findOne({snapshotHash: hash});
-            return res
+            console.log('--1',hash)
+            let res = await nodes.findOne({data:{snapshotHash: hash}});
+            console.log('--2',res)
+            return res.data
         }catch(err){
             console.log('db getSnapshot error!');
         } finally{
