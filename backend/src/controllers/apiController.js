@@ -124,7 +124,7 @@ let ApiController = class {
 async getHourlyChartEA(){
   let obj = null;
   try{
-    await axios.get('http://' + blockchainEA + ':8888/hourlyChart/1111111').then(res => {
+    await axios.get('http://' + blockchainEA + ':8888/hourlyChart/1111111/').then(res => {
       obj = res.data;  
     })
   }catch(err){
@@ -137,7 +137,7 @@ async getHourlyChartEA(){
   async getDailyChartEA(){
     let obj = null;
     try{
-      await axios.get('http://' + blockchainEA + ':8888/dailyChart/111111').then(res => {
+      await axios.get('http://' + blockchainEA + ':8888/dailyChart/111111/').then(res => {
         obj = res.data;  
       })
     }catch(err){
