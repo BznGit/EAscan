@@ -4,6 +4,9 @@ const url = settings.dataBaseUrl;
 const mongoClient = new MongoClient(url);
 let db = mongoClient.db('EASCAN'); 
 
+const ApiController = require('./apiController');
+const api = new ApiController();
+
 let DbController = class {
 
     //================================ SETTERS ==============================//
@@ -101,13 +104,14 @@ let DbController = class {
 
     // Get snapshot ---------------------------------------------------------- //
     async getSnapshot(hash){
-        try{    
-            let db = mongoClient.db('EAP');      
+        try{       
             let nodes = db.collection('snapshots');
-            console.log('--1',hash)
-            let res = await nodes.findOne({data:{snapshotHash: hash}});
-            console.log('--2',res)
-            return res.data
+            let res = await nodes.findOne({snapshotHash: hash});
+            if (res==null){
+                console.log('Going to main api for snapshot!')
+                await api.getSnapShot(hash).then((result)=>res = result) 
+            } 
+            return res
         }catch(err){
             console.log('db getSnapshot error!');
         } finally{
