@@ -8,7 +8,7 @@
           <a :href ="`http://` + pool.url" > {{ pool.url }}</a>
         </td>
       </tr>
-      <tr class="up" v-for="(value, name ) in pool.data">
+      <tr class="up" v-for="(value, name ) in pool.data" v-if = "name != 'hourlyChart'">
         <td v-if = "name != '_id'">{{ name }}: </td>
         <td class="up" v-if="name =='miners'">
           <tr v-for = "(value1, name1 ) in value">  
@@ -23,6 +23,7 @@
           </tr>
         </td>
         <td v-else-if="name !='_id' && name !='node'">{{ value }}</td>
+        
       </tr>
     </table>
     <div class="chart">

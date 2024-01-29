@@ -47,30 +47,30 @@ let ApiController = class {
 
   // Запрос NODES -----------------------------------------------------------------------------/
   async getNodes(){
-    let nodes = [];
+    let nodes1 = [];
     try{
  
       await Promise.allSettled(arrNodes.map(item =>
-          axios.get('http://' + item.node + ':8888/general/'))).then(res => {
-            let i = 0;
-              res.forEach(item=>{
-                if (item.status=='fulfilled'){
-                    let nodeInf = item.value.data;
-                    let currUrl =  item.value.request.res.responseUrl;
-                    nodes.push({node: currUrl.slice(7, -14),  data: nodeInf })
-                    i++ 
-                }
-              })     
+        axios.get('http://' + item.node + ':8888/general/'))).then(res => {
+          let i = 0;
+          res.forEach(item=>{
+            if (item.status=='fulfilled'){
+                let nodeInf = item.value.data;
+                let currUrl =  item.value.request.res.responseUrl;
+                nodes1.push({node: currUrl.slice(7, -14),  data: nodeInf })
+                i++ 
+            }
+          })     
       })    
     }catch(err){
       console.log('Api getNodes reguest error!>>', err);
     }
     let arr1 =[];
     arrNodes.forEach((item)=>{
-      let node = nodes.find(elem=>elem.node==item.node);
-      if(node!=undefined){
+      let node1 = nodes1.find(elem=>elem.node==item.node);
+      if(node1!=undefined){
         let obj = item;
-        item.data = node.data
+        item.data = node1.data
         arr1.push(obj)
       } 
     })
@@ -88,7 +88,7 @@ let ApiController = class {
               let nodeInf = item.value.data;
               let currUrl =  item.value.request.res.responseUrl;
               nodes.push({node: currUrl.slice(7, -14),  data: nodeInf })
-          }
+            }
           })     
       })    
      
